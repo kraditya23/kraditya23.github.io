@@ -1,0 +1,402 @@
+---
+// Numbers come from the src/data/cp/ snapshots (see src/lib/cp.ts).
+// Without JS all platforms render stacked; src/scripts/tabs.ts turns them into tabs.
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { cp } from '../data/site';
+import { platforms, solvedSum, floorCount, rating, titleLine, detailLine, ratingChart, formatDay } from '../lib/cp';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+
+const shown = platforms.map((p) => ({
+  ...p,
+  chart: ratingChart(p),
+  big: p.snap.rating ? rating(p.snap.rating.current) : String(p.snap.solved.total),
+  bigLabel: p.snap.rating ? titleLine(p) : 'Problems solved',
+  detail: detailLine(p),
+  profileText: p.snap.profileUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+}));
+
+const names = shown.map((p) => p.name);
+const namesText = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0];
+---
+
+<section class="sec" id="cp" aria-labelledby="cp-title">
+  <div class="wrap">
+    <SectionHead index={index} label="Competitive programming" />
+    <h2 class="h2 reveal reveal--mask" id="cp-title"><span>Ratings over adjectives.</span></h2>
+    {cp.intro && <p class="sub reveal" set:html={cp.intro} />}
+
+    <div class="cp reveal" data-tabs>
+      <div class="cp-left">
+        <div class="tabs" role="tablist" aria-label="Platform" data-tablist hidden>
+          {shown.map((p, i) => (
+            <button
+              type="button"
+              role="tab"
+              class="tab"
+              id={`cp-tab-${p.id}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-controls={`cp-panel-${p.id}`}
+              tabindex={i === 0 ? 0 : -1}
+              data-tab={p.id}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+
+        {shown.map((p) => (
+          <div class="panel" id={`cp-panel-${p.id}`} role="tabpanel" aria-labelledby={`cp-tab-${p.id}`} data-panel={p.id}>
+            <h3 class="panel-name">{p.name}</h3>
+            <p class="cp-num">{p.big}</p>
+            <p class="cp-lbl">{p.bigLabel}</p>
+            <p class="cp-note">{p.detail}</p>
+            <a class="lnk" href={p.snap.profileUrl}>
+              {p.profileText} <Icon name="external" />
+            </a>
+          </div>
+        ))}
+      </div>
+
+      <div class="cp-graph">
+        {shown.map((p) =>
+          p.chart ? (
+            <figure class="graph" data-panel={p.id}>
+              <div class="graph-top" aria-hidden="true">
+                <span>Rating history</span>
+                <b>{p.name}</b>
+              </div>
+              <div class="plot">
+                <svg viewBox={`0 0 ${p.chart.width} ${p.chart.height}`} role="img" aria-label={p.chart.summary}>
+                  {p.chart.guides.map((g) => (
+                    <line class="g-grid" x1="0" x2={p.chart!.width} y1={g.y} y2={g.y} />
+                  ))}
+                  <path class="g-area" d={p.chart.area} />
+                  <path class="g-line" d={p.chart.line} pathLength="1" />
+                  <circle class="g-dot" cx={p.chart.end.x} cy={p.chart.end.y} r="6" />
+                </svg>
+                {p.chart.guides.map((g) => (
+                  <span class="guide" style={`top: ${((g.y / p.chart!.height) * 100).toFixed(2)}%`} aria-hidden="true">
+                    {g.label}
+                  </span>
+                ))}
+              </div>
+              <figcaption>
+                {p.snap.contests.length} rated contests · updated {formatDay(p.snap.fetchedAt)} from {p.host}
+              </figcaption>
+            </figure>
+          ) : (
+            <p class="graph graph-empty" data-panel={p.id}>Not enough rated contests on {p.name} for a chart yet.</p>
+          ),
+        )}
+      </div>
+    </div>
+
+    <ul class="cp-stats">
+      <li class="stat reveal reveal--pop">
+        <span class="stat-value">{floorCount(solvedSum)}</span>
+        <span class="stat-label">problems solved across {namesText}</span>
+      </li>
+      {cp.extras.map((e, i) => (
+        <li class="stat reveal reveal--pop" style={`--reveal-delay: ${(i + 1) * 90}ms`}>
+          <span class="stat-value">{e.value}</span>
+          <span class="stat-label">{e.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  import { initTabs } from '../scripts/tabs';
+
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(initTabs);
+</script>
+
+<style>
+  .cp {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    margin-top: clamp(40px, 5vw, 64px);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--s1);
+  }
+
+  .cp-left {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: clamp(22px, 3vw, 40px);
+    border-right: 1px solid var(--line);
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 5px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg);
+  }
+
+  .tabs[hidden] {
+    display: none;
+  }
+
+  .tab {
+    flex: 1;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--mute);
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .tab:hover {
+    color: var(--ink);
+  }
+
+  .tab[aria-selected='true'] {
+    background: var(--s2);
+    box-shadow: inset 0 0 0 1px var(--line2);
+    color: var(--ink);
+  }
+
+  .tab:focus-visible {
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 600px) {
+    .tabs {
+      flex-wrap: nowrap;
+    }
+
+    .tab {
+      min-width: 0;
+      padding: 0 6px;
+      font-size: 13.5px;
+    }
+  }
+
+  .panel-name {
+    margin: 0 0 8px;
+    color: var(--mute);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* With tabs active, the tab already names the platform. */
+  :global(.js) .panel-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .panel + .panel {
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .panel[hidden],
+  .graph[hidden] {
+    display: none;
+  }
+
+  .cp-num {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(64px, 8vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    transform-origin: 0 70%;
+  }
+
+  .cp-lbl {
+    margin: 12px 0 0;
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cp-note {
+    max-width: 380px;
+    margin: 16px 0 4px;
+    color: var(--mute);
+    font-size: 15.5px;
+  }
+
+  .cp-graph {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    min-width: 0;
+    padding: clamp(22px, 3vw, 40px);
+  }
+
+  .graph {
+    margin: 0;
+  }
+
+  .graph-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .graph-top b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .plot {
+    position: relative;
+  }
+
+  .plot svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .guide {
+    position: absolute;
+    right: 0;
+    transform: translateY(-120%);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .g-grid {
+    stroke: rgb(125 160 255 / 0.1);
+    stroke-width: 1;
+  }
+
+  .g-line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .g-area {
+    fill: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .g-dot {
+    fill: var(--bg);
+    stroke: var(--accent-ink);
+    stroke-width: 3;
+  }
+
+  figcaption,
+  .graph-empty {
+    margin: 14px 0 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+
+  .cp-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Animate on reveal; un-hiding a panel restarts its animations on tab switch. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .cp.is-visible .cp-num {
+      animation: enlarge 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+    }
+
+    :global(.js) .cp:not(.is-visible) .g-line {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.js) .cp.is-visible .g-line {
+      stroke-dasharray: 1;
+      animation: dash 1.6s cubic-bezier(0.3, 0.6, 0.2, 1) 0.15s both;
+    }
+
+    :global(.js) .cp:not(.is-visible) :is(.g-area, .g-dot) {
+      opacity: 0;
+    }
+
+    :global(.js) .cp.is-visible :is(.g-area, .g-dot) {
+      animation: fade-in 0.8s ease 1.3s both;
+    }
+  }
+
+  @keyframes enlarge {
+    from {
+      opacity: 0;
+      transform: scale(0.82);
+      filter: blur(8px);
+    }
+  }
+
+  @keyframes dash {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .cp {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cp-left {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cp-stats {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

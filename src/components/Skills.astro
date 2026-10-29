@@ -1,0 +1,112 @@
+---
+import SectionHead from './SectionHead.astro';
+import { site } from '../data/site';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+const { skills, now } = site;
+---
+
+<section class="sec" id="skills" aria-labelledby="skills-title">
+  <div class="wrap">
+    <SectionHead index={index} label="Skills" />
+    <h2 class="h2 reveal reveal--mask" id="skills-title"><span>The toolbox.</span></h2>
+    <div class="skills-grid">
+      {skills.map((g, i) => (
+        <div class="sk reveal" style={`--reveal-delay: ${i * 80}ms`}>
+          <h3>{g.title}</h3>
+          <p>{g.blurb}</p>
+          <ul class="chips">
+            {g.items.map((item) => <li class="chip">{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+    {now.items.length > 0 && (
+      <p class="now reveal">
+        <b>{now.label}</b>
+        {now.items.map((item, i) => (
+          <>
+            {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+            <span>{item}</span>
+          </>
+        ))}
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  .sk {
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--s1);
+  }
+
+  h3 {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+  }
+
+  .sk p {
+    margin: 0 0 18px;
+    color: var(--faint);
+    font-size: 13.5px;
+  }
+
+  .sk .chips {
+    margin-top: 0;
+  }
+
+  .now {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin: 16px 0 0;
+    padding: 18px 22px;
+    border: 1px dashed var(--line2);
+    border-radius: var(--radius-md);
+    color: var(--mute);
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+  }
+
+  .now b {
+    margin-right: 6px;
+    color: var(--accent-ink);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .sep {
+    color: var(--line2);
+  }
+
+  @media (max-width: 960px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .skills-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

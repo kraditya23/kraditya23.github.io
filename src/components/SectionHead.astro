@@ -1,0 +1,50 @@
+---
+// Numbered label row above each section. Decorative: each section has its own <h2>.
+interface Props {
+  index: number;
+  label: string;
+}
+
+const { index, label } = Astro.props;
+---
+
+<p class="sec-head reveal" aria-hidden="true">
+  <span class="num">{String(index).padStart(2, '0')}</span>
+  <span>{label}</span>
+  <span class="rule" aria-hidden="true"></span>
+</p>
+
+<style>
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 28px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .num {
+    color: var(--accent-ink);
+  }
+
+  .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line2);
+    transform-origin: 0 50%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .sec-head .rule {
+      transition: transform 1.2s var(--ease-out) 0.2s;
+    }
+
+    :global(.js) .sec-head:not(.is-visible) .rule {
+      transform: scaleX(0);
+    }
+  }
+</style>

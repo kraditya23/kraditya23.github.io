@@ -1,0 +1,179 @@
+---
+import SectionHead from './SectionHead.astro';
+import { site } from '../data/site';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+const { about } = site;
+---
+
+<section class="sec" id="about" aria-labelledby="about-title">
+  <div class="wrap">
+    <SectionHead index={index} label="About" />
+    <h2 class="visually-hidden" id="about-title">About</h2>
+    <div class="about-grid">
+      <div>
+        <p class="statement reveal" set:html={about.statement} />
+        {about.paragraphs.map((p, i) => (
+          <p class="body reveal" style={`--reveal-delay: ${80 + i * 60}ms`} set:html={p} />
+        ))}
+      </div>
+
+      {about.education.length > 0 && (
+        <div class="card edu reveal reveal--right">
+          <h3 class="card-label">Education &amp; credentials</h3>
+          <ul class="tl">
+            {about.education.map((e) => (
+              <li>
+                <p class="tl-when">{e.when}</p>
+                <p class="tl-what">{e.what}</p>
+                {e.detail && <p class="tl-sub">{e.detail}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+
+    {about.facts.length > 0 && (
+      <ul class="facts">
+        {about.facts.map((f, i) => (
+          <li class="stat reveal reveal--pop" style={`--reveal-delay: ${i * 90}ms`}>
+            <span class="stat-value">{f.value}</span>
+            <span class="stat-label">{f.label}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+    gap: clamp(40px, 6vw, 88px);
+    margin-top: 8px;
+  }
+
+  .statement {
+    margin: 0 0 28px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+  }
+
+  .body {
+    max-width: 600px;
+    margin: 0 0 18px;
+    color: var(--mute);
+    font-size: 17px;
+  }
+
+  .body :global(b) {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .edu {
+    padding: 28px;
+  }
+
+  .tl {
+    position: relative;
+    margin: 0;
+    padding: 0 0 0 24px;
+    list-style: none;
+  }
+
+  .tl::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--line2);
+    transform-origin: 50% 0;
+  }
+
+  .tl li {
+    position: relative;
+    padding-bottom: 22px;
+  }
+
+  .tl li:last-child {
+    padding-bottom: 0;
+  }
+
+  .tl li::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 11px;
+    height: 11px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    background: var(--s1);
+  }
+
+  .tl p {
+    margin: 0;
+  }
+
+  .tl-when {
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .tl-what {
+    margin-top: 2px;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .tl-sub {
+    color: var(--mute);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: clamp(48px, 6vw, 80px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .edu .tl::before {
+      transition: transform 1.2s var(--ease-out) 0.25s;
+    }
+
+    :global(.js) .edu:not(.is-visible) .tl::before {
+      transform: scaleY(0);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+// Inline stroke icons. Decorative (aria-hidden) unless `label` is set.
+interface Props {
+  name: 'external' | 'arrow-down' | 'arrow-up' | 'send' | 'play' | 'sword' | 'crosshair';
+  size?: number;
+  label?: string;
+  class?: string;
+}
+
+const { name, size = 16, label, class: className } = Astro.props;
+
+const paths: Record<Props['name'], string> = {
+  external: '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
+  'arrow-down': '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+  'arrow-up': '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',
+  send: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/>',
+  play: '<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',
+  sword: '<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/>',
+  crosshair: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/>',
+};
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+  set:html={paths[name]}
+/>

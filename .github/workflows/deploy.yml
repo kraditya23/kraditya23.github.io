@@ -1,0 +1,73 @@
+name: Deploy to GitHub Pages
+
+# Fetch CP snapshots, commit changes, build and deploy in one run
+# (pushes made with GITHUB_TOKEN don't trigger other workflows).
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Daily, off the hour to avoid scheduler congestion.
+    - cron: '23 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit the updated snapshots
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Browser tests run in test.yml.
+      - name: Type-check and test the CP parsers
+        run: npm run test:cp && npm run check
+
+      # Always exits 0; an unreachable platform keeps its last snapshot.
+      - name: Fetch CP snapshots
+        run: npm run fetch:cp
+
+      - name: Commit updated snapshots
+        run: |
+          if [ -z "$(git status --porcelain -- src/data/cp)" ]; then
+            echo "Snapshots unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- src/data/cp
+          git commit -m "chore: update CP snapshots"
+          # If main moved meanwhile, deploy anyway; the next run commits the update.
+          git push || echo "::warning title=Snapshots not pushed::main moved during the run; the next run will commit the update."
+
+      - name: Build and upload the site
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

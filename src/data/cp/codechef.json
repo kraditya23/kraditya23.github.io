@@ -1,0 +1,86 @@
+{
+  "platform": "codechef",
+  "handle": "kraditya23",
+  "profileUrl": "https://www.codechef.com/users/kraditya23",
+  "fetchedAt": "2026-10-10T17:56:46.621Z",
+  "sources": [
+    "https://www.codechef.com/users/kraditya23"
+  ],
+  "rating": {
+    "current": 1676,
+    "max": 1713,
+    "title": "3★",
+    "globalRank": 8705,
+    "countryRank": 7965
+  },
+  "contests": [
+    {
+      "id": "START235D",
+      "name": "Starters 235 (Rated)",
+      "date": "2026-04-22",
+      "rank": 442,
+      "newRating": 1409,
+      "url": "https://www.codechef.com/START235D",
+      "solved": 5
+    },
+    {
+      "id": "START236D",
+      "name": "Starters 236 (Rated)",
+      "date": "2026-04-29",
+      "rank": 224,
+      "oldRating": 1409,
+      "newRating": 1588,
+      "delta": 179,
+      "url": "https://www.codechef.com/START236D",
+      "solved": 5
+    },
+    {
+      "id": "START237C",
+      "name": "Starters 237 (Rated)",
+      "date": "2026-05-06",
+      "rank": 125,
+      "oldRating": 1588,
+      "newRating": 1690,
+      "delta": 102,
+      "url": "https://www.codechef.com/START237C",
+      "solved": 6
+    },
+    {
+      "id": "START243B",
+      "name": "Starters 243 (Rated)",
+      "date": "2026-06-17",
+      "rank": 522,
+      "oldRating": 1690,
+      "newRating": 1713,
+      "delta": 23,
+      "url": "https://www.codechef.com/START243B",
+      "solved": 4
+    },
+    {
+      "id": "START246B",
+      "name": "Starters 246 (Rated)",
+      "date": "2026-07-08",
+      "rank": 994,
+      "oldRating": 1713,
+      "newRating": 1676,
+      "delta": -37,
+      "url": "https://www.codechef.com/START246B",
+      "solved": 3
+    }
+  ],
+  "solved": {
+    "total": 62
+  },
+  "activity": {
+    "2026-04-18": 1,
+    "2026-04-19": 3,
+    "2026-04-20": 6,
+    "2026-04-22": 6,
+    "2026-04-29": 10,
+    "2026-04-30": 1,
+    "2026-05-06": 7,
+    "2026-05-07": 36,
+    "2026-06-17": 4,
+    "2026-07-08": 5
+  }
+}

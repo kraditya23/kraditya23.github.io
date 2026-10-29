@@ -1,0 +1,315 @@
+---
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { hasPublicFile } from '../lib/files';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+
+// PUBLIC_FORMSPREE_ID overrides site.formspreeId (used by the e2e tests).
+const formId = (import.meta.env.PUBLIC_FORMSPREE_ID as string | undefined) || site.formspreeId;
+const resume = hasPublicFile(site.resumeFile) ? `/${site.resumeFile}` : '';
+const strip = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+const socials = [
+  { name: 'GitHub', href: site.links.github },
+  { name: 'LinkedIn', href: site.links.linkedin },
+  { name: 'LeetCode', href: site.links.leetcode },
+  { name: 'Codeforces', href: site.links.codeforces },
+  { name: 'CodeChef', href: site.links.codechef },
+]
+  .filter((s) => s.href)
+  .map((s) => ({ ...s, handle: strip(s.href).split('/').at(-1) ?? strip(s.href) }));
+
+const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle: site.email } : undefined;
+---
+
+<section class="sec" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <SectionHead index={index} label="Contact" />
+    <div class="contact-grid">
+      <div>
+        <h2 class="h2 reveal reveal--mask" id="contact-title"><span>Let’s build something <span class="hl">fast</span>.</span></h2>
+        <p class="sub reveal">Hiring for SWE or quant-dev internships, want to talk low-latency C++, or have a contest problem that’s been bugging you? My inbox is open.</p>
+        <ul class="socials reveal">
+          {socials.map((s) => (
+            <li>
+              <a class="soc" href={s.href} rel="me noopener">
+                <span class="soc-name">{s.name}</span>
+                <span class="soc-handle">{s.handle}</span>
+                <Icon name="external" />
+              </a>
+            </li>
+          ))}
+          {email && (
+            <li>
+              <a class="soc" href={email.href}>
+                <span class="soc-name">{email.name}</span>
+                <span class="soc-handle">{email.handle}</span>
+                <Icon name="external" />
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+
+      {formId ? (
+        <form
+          class="card form reveal reveal--right"
+          action={`https://formspree.io/f/${formId}`}
+          method="POST"
+          data-contact-form
+          data-fallback-email={site.email}
+          aria-labelledby="form-title"
+        >
+          <h3 class="card-label" id="form-title">Send a direct message</h3>
+          <div class="row2">
+            <div class="fld">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" type="text" name="name" autocomplete="name" placeholder="Your name" required maxlength="120" />
+            </div>
+            <div class="fld">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" type="email" name="email" autocomplete="email" placeholder="you@company.com" required maxlength="200" />
+            </div>
+          </div>
+          <div class="fld">
+            <label for="cf-reason">What’s it about?</label>
+            <select id="cf-reason" name="reason">
+              <option>Internship / role</option>
+              <option>Collaboration</option>
+              <option>Just saying hi</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="5" placeholder="What’s on your mind?" required maxlength="5000"></textarea>
+          </div>
+          <div class="gotcha" aria-hidden="true">
+            <label for="cf-gotcha">Leave this empty</label>
+            <input id="cf-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="form-foot">
+            <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+            <button class="btn btn-primary" type="submit">
+              <span data-label>Send message</span>
+              <Icon name="send" />
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div class="card form reveal reveal--right">
+          <h3 class="card-label">Get in touch</h3>
+          <p class="fallback">
+            {site.email ? 'The quickest way to reach me is email.' : 'The quickest way to reach me is LinkedIn.'}
+          </p>
+          <div class="ctas">
+            {site.email ? (
+              <a class="btn btn-primary" href={`mailto:${site.email}`}>Email me <Icon name="send" /></a>
+            ) : (
+              site.links.linkedin && <a class="btn btn-primary" href={site.links.linkedin}>Message me on LinkedIn <Icon name="external" /></a>
+            )}
+            {resume && <a class="btn btn-ghost" href={resume}>Résumé (PDF)</a>}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initContactForm } from '../scripts/contact-form';
+
+  document.querySelectorAll<HTMLFormElement>('form[data-contact-form]').forEach(initContactForm);
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(36px, 5vw, 72px);
+  }
+
+  .socials {
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .socials li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .soc {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 54px;
+    padding: 12px 4px;
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      padding 0.25s;
+  }
+
+  .soc:hover {
+    padding-left: 12px;
+    color: var(--accent-ink);
+  }
+
+  .soc-name {
+    font-weight: 500;
+  }
+
+  .soc-handle {
+    min-width: 0;
+    margin-left: auto;
+    overflow: hidden;
+    color: var(--mute);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .soc :global(svg) {
+    flex: none;
+    color: var(--faint);
+    transition:
+      transform 0.2s,
+      color 0.2s;
+  }
+
+  .soc:hover :global(svg) {
+    color: var(--accent-ink);
+    transform: translate(2px, -2px);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+    padding: clamp(22px, 3vw, 36px);
+  }
+
+  .form .card-label {
+    margin-bottom: 4px;
+  }
+
+  .row2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .fld {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fld label {
+    color: var(--mute);
+    font-size: 13.5px;
+    font-weight: 500;
+  }
+
+  .fld :is(input, textarea, select) {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid var(--line2);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .fld :is(input, textarea)::placeholder {
+    color: #75819a;
+  }
+
+  .fld textarea {
+    min-height: 136px;
+    resize: vertical;
+  }
+
+  .fld :is(input, textarea, select):focus-visible {
+    border-color: var(--accent);
+    border-radius: var(--radius-sm);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .fld :is(input, textarea):user-invalid {
+    border-color: var(--ask);
+  }
+
+  .gotcha {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .form-status {
+    flex: 1 1 220px;
+    margin: 0;
+    color: var(--faint);
+    font-size: 14px;
+  }
+
+  .form[data-state='sent'] .form-status {
+    color: var(--accent-ink);
+  }
+
+  .form[data-state='error'] .form-status {
+    color: var(--ask);
+  }
+
+  .fallback {
+    margin: 0;
+    color: var(--mute);
+  }
+
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (max-width: 960px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .row2 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

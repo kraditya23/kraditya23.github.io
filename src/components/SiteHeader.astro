@@ -1,0 +1,206 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { hasPublicFile } from '../lib/files';
+import { platforms } from '../lib/cp';
+
+const resume = hasPublicFile(site.resumeFile) ? `/${site.resumeFile}` : '';
+
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#projects', label: 'Projects' },
+  ...(platforms.length ? [{ href: '#cp', label: 'CP' }] : []),
+  { href: '#skills', label: 'Skills' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<div class="progress" aria-hidden="true"></div>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label={`${site.handle}, back to top`}>
+      <span class="logo-mark" aria-hidden="true">ak</span>
+      <span>{site.handle}</span>
+    </a>
+    <nav aria-label="Sections">
+      <ul class="nav-links">
+        {links.map((l) => (
+          <li><a href={l.href}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    {resume && (
+      <a class="nav-cta" href={resume} target="_blank" rel="noopener">
+        Résumé <Icon name="external" size={14} /><span class="visually-hidden"> (PDF, opens in a new tab)</span>
+      </a>
+    )}
+  </div>
+</header>
+
+<style>
+  /* Scroll progress: CSS scroll-driven animation where supported; invisible elsewhere. */
+  .progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 80;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .progress {
+        animation: progress linear both;
+        animation-timeline: scroll(root);
+      }
+    }
+  }
+
+  @keyframes progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 70;
+    border-bottom: 1px solid var(--line);
+    background: rgb(6 10 19 / 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  .nav-in {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'logo nav cta';
+    align-items: center;
+    gap: 4px 16px;
+    min-height: 64px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  nav {
+    grid-area: nav;
+    justify-self: end;
+  }
+
+  .logo {
+    grid-area: logo;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .logo:hover {
+    color: var(--ink);
+  }
+
+  .logo-mark {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent-ink);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    color: var(--mute);
+    font-size: 14px;
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+    background: rgb(125 160 255 / 0.08);
+  }
+
+  .nav-cta {
+    grid-area: cta;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line2);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 14px;
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .nav-cta:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Phones: logo and Résumé on the first row, section links on a second, full-width row. */
+  @media (max-width: 760px) {
+    .nav-in {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'logo cta'
+        'nav nav';
+    }
+
+    nav {
+      justify-self: stretch;
+      margin: 0 -8px;
+    }
+
+    .nav-links {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .nav-links a {
+      padding: 0 8px;
+      font-size: 13.5px;
+    }
+  }
+
+  @media (max-width: 319px) {
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+</style>

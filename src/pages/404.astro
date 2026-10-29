@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Page not found" bare noindex>
+  <section class="nf wrap" aria-labelledby="nf-title">
+    <p class="code">404</p>
+    <h1 id="nf-title">That page isn’t in the book.</h1>
+    <p class="sub">The link may be old, or the address has a typo.</p>
+    <a class="btn btn-primary" href="/">Back to the home page <Icon name="arrow-up" /></a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    min-height: 70vh;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .code {
+    margin: 0;
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .sub {
+    margin: 0 0 8px;
+  }
+</style>

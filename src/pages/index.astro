@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import CompetitiveProgramming from '../components/CompetitiveProgramming.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import { platforms } from '../lib/cp';
+
+// Section numbers follow the order below, so reordering or removing a section renumbers the rest.
+const sections = [About, Projects, ...(platforms.length ? [CompetitiveProgramming] : []), Skills, Contact];
+---
+
+<Base>
+  <Hero />
+  {sections.map((Section, i) => <Section index={i + 1} />)}
+</Base>

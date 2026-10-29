@@ -1,0 +1,45 @@
+---
+import SectionHead from './SectionHead.astro';
+import ProjectCard from './ProjectCard.astro';
+import OrderBookLadder from './visuals/OrderBookLadder.astro';
+import PhoneShot from './visuals/PhoneShot.astro';
+import GameFrame from './visuals/GameFrame.astro';
+import { lob, connecta, game } from '../data/projects';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+---
+
+<section class="sec" id="projects" aria-labelledby="projects-title">
+  <div class="wrap">
+    <SectionHead index={index} label="Projects" />
+    <h2 class="h2 reveal reveal--mask" id="projects-title"><span>Things I’ve built.</span></h2>
+    <p class="sub reveal">Sorted by how many nanoseconds they care about. The last one is where it all started.</p>
+
+    <div class="projects">
+      <ProjectCard project={lob} side="left">
+        <OrderBookLadder />
+      </ProjectCard>
+
+      <ProjectCard project={connecta} side="right">
+        <PhoneShot {...connecta.screenshot} />
+      </ProjectCard>
+
+      <ProjectCard project={game} side="left">
+        <GameFrame title={game.title} repoName={game.repoName} year={game.year} playUrl={game.playUrl} />
+      </ProjectCard>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 8vw, 112px);
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+</style>

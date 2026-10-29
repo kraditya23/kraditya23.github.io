@@ -1,0 +1,279 @@
+{
+  "platform": "codeforces",
+  "handle": "kraditya23",
+  "profileUrl": "https://codeforces.com/profile/kraditya23",
+  "fetchedAt": "2026-10-10T17:55:02.299Z",
+  "sources": [
+    "https://codeforces.com/api/user.info?handles=kraditya23",
+    "https://codeforces.com/api/user.rating?handle=kraditya23",
+    "https://codeforces.com/api/user.status?handle=kraditya23"
+  ],
+  "rating": {
+    "current": 1278,
+    "max": 1387,
+    "title": "Pupil",
+    "maxTitle": "Pupil"
+  },
+  "contests": [
+    {
+      "id": "2153",
+      "name": "Codeforces Round 1057 (Div. 2)",
+      "date": "2025-10-10",
+      "rank": 9800,
+      "oldRating": 0,
+      "newRating": 431,
+      "delta": 431,
+      "url": "https://codeforces.com/contest/2153"
+    },
+    {
+      "id": "2160",
+      "name": "Codeforces Round 1058 (Div. 2)",
+      "date": "2025-10-12",
+      "rank": 6325,
+      "oldRating": 431,
+      "newRating": 748,
+      "delta": 317,
+      "url": "https://codeforces.com/contest/2160"
+    },
+    {
+      "id": "2162",
+      "name": "Codeforces Round 1059 (Div. 3)",
+      "date": "2025-10-17",
+      "rank": 12394,
+      "oldRating": 748,
+      "newRating": 924,
+      "delta": 176,
+      "url": "https://codeforces.com/contest/2162"
+    },
+    {
+      "id": "2154",
+      "name": "Codeforces Round 1060 (Div. 2)",
+      "date": "2025-10-19",
+      "rank": 8361,
+      "oldRating": 924,
+      "newRating": 1035,
+      "delta": 111,
+      "url": "https://codeforces.com/contest/2154"
+    },
+    {
+      "id": "2161",
+      "name": "Pinely Round 5 (Div. 1 + Div. 2)",
+      "date": "2025-10-30",
+      "rank": 3467,
+      "oldRating": 1035,
+      "newRating": 1181,
+      "delta": 146,
+      "url": "https://codeforces.com/contest/2161"
+    },
+    {
+      "id": "2169",
+      "name": "Educational Codeforces Round 184 (Rated for Div. 2)",
+      "date": "2025-11-14",
+      "rank": 5686,
+      "oldRating": 1181,
+      "newRating": 1239,
+      "delta": 58,
+      "url": "https://codeforces.com/contest/2169"
+    },
+    {
+      "id": "2191",
+      "name": "Codeforces Round 1073 (Div. 2)",
+      "date": "2026-01-17",
+      "rank": 7706,
+      "oldRating": 1239,
+      "newRating": 1215,
+      "delta": -24,
+      "url": "https://codeforces.com/contest/2191"
+    },
+    {
+      "id": "2225",
+      "name": "Educational Codeforces Round 189 (Rated for Div. 2)",
+      "date": "2026-04-21",
+      "rank": 6653,
+      "oldRating": 1215,
+      "newRating": 1193,
+      "delta": -22,
+      "url": "https://codeforces.com/contest/2225"
+    },
+    {
+      "id": "2222",
+      "name": "Spectral::Cup 2026 Round 1 (Codeforces Round 1094, Div. 1 + Div. 2)",
+      "date": "2026-04-25",
+      "rank": 3080,
+      "oldRating": 1193,
+      "newRating": 1262,
+      "delta": 69,
+      "url": "https://codeforces.com/contest/2222"
+    },
+    {
+      "id": "2227",
+      "name": "Codeforces Round 1096 (Div. 3)",
+      "date": "2026-04-30",
+      "rank": 3429,
+      "oldRating": 1262,
+      "newRating": 1272,
+      "delta": 10,
+      "url": "https://codeforces.com/contest/2227"
+    },
+    {
+      "id": "2250",
+      "name": "Codeforces Round 1112 (Div. 2)",
+      "date": "2026-07-26",
+      "rank": 3826,
+      "oldRating": 1272,
+      "newRating": 1288,
+      "delta": 16,
+      "url": "https://codeforces.com/contest/2250"
+    },
+    {
+      "id": "2259",
+      "name": "Codeforces Round 1119 (Div. 3)",
+      "date": "2026-09-05",
+      "rank": 1034,
+      "oldRating": 1288,
+      "newRating": 1387,
+      "delta": 99,
+      "url": "https://codeforces.com/contest/2259"
+    },
+    {
+      "id": "2260",
+      "name": "Educational Codeforces Round 194 (Rated for Div. 2)",
+      "date": "2026-09-08",
+      "rank": 10509,
+      "oldRating": 1387,
+      "newRating": 1278,
+      "delta": -109,
+      "url": "https://codeforces.com/contest/2260"
+    }
+  ],
+  "solved": {
+    "total": 103,
+    "byDifficulty": [
+      {
+        "label": "800",
+        "count": 53
+      },
+      {
+        "label": "900",
+        "count": 17
+      },
+      {
+        "label": "1000",
+        "count": 5
+      },
+      {
+        "label": "1100",
+        "count": 5
+      },
+      {
+        "label": "1200",
+        "count": 5
+      },
+      {
+        "label": "1300",
+        "count": 2
+      },
+      {
+        "label": "1400",
+        "count": 3
+      },
+      {
+        "label": "1500",
+        "count": 4
+      },
+      {
+        "label": "1600",
+        "count": 1
+      },
+      {
+        "label": "1700",
+        "count": 3
+      },
+      {
+        "label": "1800",
+        "count": 2
+      },
+      {
+        "label": "2100",
+        "count": 1
+      },
+      {
+        "label": "Unrated",
+        "count": 2
+      }
+    ],
+    "byTag": [
+      {
+        "name": "greedy",
+        "count": 47
+      },
+      {
+        "name": "math",
+        "count": 41
+      },
+      {
+        "name": "constructive algorithms",
+        "count": 25
+      },
+      {
+        "name": "implementation",
+        "count": 24
+      },
+      {
+        "name": "brute force",
+        "count": 23
+      },
+      {
+        "name": "sortings",
+        "count": 12
+      },
+      {
+        "name": "number theory",
+        "count": 9
+      },
+      {
+        "name": "data structures",
+        "count": 7
+      },
+      {
+        "name": "binary search",
+        "count": 5
+      },
+      {
+        "name": "bitmasks",
+        "count": 5
+      }
+    ]
+  },
+  "activity": {
+    "2025-10-11": 14,
+    "2025-10-12": 14,
+    "2025-10-13": 19,
+    "2025-10-14": 3,
+    "2025-10-15": 6,
+    "2025-10-16": 3,
+    "2025-10-17": 12,
+    "2025-10-18": 3,
+    "2025-10-19": 6,
+    "2025-10-20": 9,
+    "2025-10-21": 7,
+    "2025-10-30": 5,
+    "2025-11-14": 3,
+    "2025-11-23": 3,
+    "2026-01-17": 3,
+    "2026-04-20": 2,
+    "2026-04-21": 7,
+    "2026-04-25": 4,
+    "2026-04-30": 6,
+    "2026-05-01": 2,
+    "2026-07-10": 3,
+    "2026-07-26": 4,
+    "2026-09-05": 5,
+    "2026-09-08": 3,
+    "2026-09-27": 4,
+    "2026-09-29": 5,
+    "2026-10-01": 2,
+    "2026-10-02": 1,
+    "2026-10-10": 3
+  }
+}

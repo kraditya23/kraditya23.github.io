@@ -1,0 +1,51 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+const domain = new URL(site.url).host;
+const topHref = Astro.url.pathname === '/' ? '#top' : '/';
+---
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p>© {year} {site.name} · {domain}</p>
+    <p>Compiled with -O3 -march=native. (Kidding. It’s HTML.)</p>
+    <a href={topHref}>{topHref === '/' ? 'Home' : 'Back to top'} <Icon name="arrow-up" size={14} /></a>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .foot-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--mute);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-ink);
+  }
+</style>

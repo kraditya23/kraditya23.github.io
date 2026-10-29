@@ -1,0 +1,165 @@
+---
+// Static, illustrative order book (captioned as such). Depth bars fill in on reveal.
+const asks = [
+  { px: '101.35', qty: 320 },
+  { px: '101.30', qty: 880 },
+  { px: '101.25', qty: 540 },
+  { px: '101.20', qty: 1240 },
+  { px: '101.15', qty: 760 },
+];
+const bids = [
+  { px: '101.10', qty: 1020 },
+  { px: '101.05', qty: 1480 },
+  { px: '101.00', qty: 620 },
+  { px: '100.95', qty: 940 },
+  { px: '100.90', qty: 380 },
+];
+const maxQty = 1500;
+const fmt = new Intl.NumberFormat('en-US');
+const rows = [...asks.map((r) => ({ ...r, side: 'ask' })), ...bids.map((r) => ({ ...r, side: 'bid' }))].map((r, i) => ({
+  ...r,
+  width: `${Math.round((r.qty / maxQty) * 100)}%`,
+  delay: `${300 + i * 60}ms`,
+}));
+---
+
+<figure class="book-fig">
+  <div class="book" aria-hidden="true">
+    <div class="lvl head"><span>Price</span><span>Depth</span><span class="qty">Size</span></div>
+    {rows.map((r, i) => (
+      <>
+        {i === asks.length && (
+          <div class="spread"><span>spread</span><b>0.05</b><span>mid 101.125</span></div>
+        )}
+        <div class:list={['lvl', r.side]}>
+          <span class="px">{r.px}</span>
+          <span class="track"><span class="bar" style={`width: ${r.width}; transition-delay: ${r.delay}`}></span></span>
+          <span class="qty">{fmt.format(r.qty)}</span>
+        </div>
+      </>
+    ))}
+    <div class="foot"><span>sweep()</span> fills FIFO at the best level, then walks the tree to the next one</div>
+  </div>
+  <figcaption>Illustrative book · bids blue, asks amber</figcaption>
+</figure>
+
+<style>
+  .book-fig {
+    margin: 0;
+  }
+
+  .book {
+    padding: 16px;
+    border: 1px solid var(--line2);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+
+  .lvl {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) 52px;
+    align-items: center;
+    gap: 12px;
+    padding: 3px 4px;
+  }
+
+  .head {
+    margin-bottom: 6px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .qty {
+    color: var(--mute);
+    text-align: right;
+  }
+
+  .ask .px {
+    color: var(--ask);
+  }
+
+  .bid .px {
+    color: var(--accent-ink);
+  }
+
+  .track {
+    position: relative;
+    height: 14px;
+  }
+
+  .bar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 3px;
+    transform-origin: 0 50%;
+  }
+
+  .ask .bar {
+    background: color-mix(in srgb, var(--ask) 38%, transparent);
+  }
+
+  .bid .bar {
+    background: color-mix(in srgb, var(--accent) 48%, transparent);
+  }
+
+  .spread {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0;
+    padding: 8px 4px;
+    border-top: 1px dashed var(--line2);
+    border-bottom: 1px dashed var(--line2);
+    color: var(--faint);
+    font-size: 11.5px;
+  }
+
+  .spread b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .foot {
+    margin-top: 12px;
+    padding: 10px 4px 0;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  .foot span {
+    color: var(--accent-ink);
+  }
+
+  figcaption {
+    margin-top: 12px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .bar {
+      transition: transform 1s var(--ease-out);
+    }
+
+    :global(.js .reveal:not(.is-visible)) .bar {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .lvl {
+      grid-template-columns: 56px minmax(0, 1fr) 44px;
+      gap: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+// Phone frame around an app screenshot. Lifts into place on reveal.
+interface Props {
+  src360: string;
+  src738: string;
+  alt: string;
+  width?: number;
+  height?: number;
+}
+
+const { src360, src738, alt, width = 360, height = 745 } = Astro.props;
+---
+
+<figure class="phone-fig">
+  <div class="phone">
+    <img
+      src={src360}
+      srcset={`${src360} 360w, ${src738} 738w`}
+      sizes="226px"
+      width={width}
+      height={height}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <figcaption>Connecta v1.0.0 on Android</figcaption>
+</figure>
+
+<style>
+  .phone-fig {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 8px 0;
+  }
+
+  .phone {
+    width: 250px;
+    padding: 12px;
+    border: 1px solid var(--line2);
+    border-radius: 38px;
+    background: #0a101d;
+    box-shadow: 0 40px 90px -40px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 26px;
+    background: var(--bg);
+  }
+
+  figcaption {
+    margin-top: 12px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .phone {
+      transition: transform 1.2s var(--ease-out) 0.15s;
+    }
+
+    :global(.js .reveal:not(.is-visible)) .phone {
+      transform: translateY(48px) rotate(-6deg);
+    }
+  }
+</style>
