@@ -56,7 +56,7 @@ export const site = {
     // HTML
     paragraphs: [
       'C++ has been my main language since well before college — <b>two-plus years before my B.Tech started</b> — and competitive programming taught me to care about two things at once: speed and correctness.',
-      'These days I’m building a <b>low-latency limit order book engine</b> and aiming at trading-systems engineering — where a few hundred nanoseconds actually matter.',
+      'These days I’m taking my <b>limit order book engine</b> past a finished matching core to a full test suite and Nasdaq ITCH replay, and aiming at trading-systems engineering — where a few hundred nanoseconds actually matter.',
       'Hardware counts too: <b>second prize at a micromouse competition</b>, after a sensor broke on competition day and I had to adapt on the spot.',
     ],
     education: [
@@ -95,7 +95,7 @@ export const site = {
   // Strip under the skills. Empty list hides it.
   now: {
     label: 'Up next',
-    items: ['GoogleTest', 'Google Benchmark', 'Compiler Design'],
+    items: ['GoogleTest', 'Google Benchmark', 'Nasdaq ITCH 5.0'],
   },
 };
 

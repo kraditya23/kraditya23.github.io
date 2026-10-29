@@ -20,9 +20,12 @@ const rows = [
   { label: 'warmup', value: lobBench.warmup },
   { label: 'mixed ops', value: lobBench.ops },
   { label: 'price levels', value: lobBench.levels },
+  { label: 'runs', value: lobBench.runs },
   { label: 'throughput', value: lobBench.throughput, hit: true },
-  { label: 'avg per op', value: lobBench.perOp, hit: true },
+  { label: 'mean per op', value: lobBench.mean, hit: true },
+  { label: 'p99 per op', value: lobBench.p99, hit: true },
 ];
+const promptDelay = 2200 + rows.length * 150;
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
@@ -76,9 +79,9 @@ const rows = [
               </div>
             ))}
           </dl>
-          <p class="t-prompt load" style="--d: 3000ms" aria-hidden="true"><span class="t-p">$ </span><span class="t-cur"></span></p>
+          <p class="t-prompt load" style={`--d: ${promptDelay}ms`} aria-hidden="true"><span class="t-p">$ </span><span class="t-cur"></span></p>
         </div>
-        <figcaption class="visually-hidden">Order book engine benchmark, run 1 on a {lobBench.machine}.</figcaption>
+        <figcaption class="visually-hidden">Order book engine benchmark, median of 11 runs on a {lobBench.machine}; p99 is an upper bound.</figcaption>
       </figure>
     </div>
 

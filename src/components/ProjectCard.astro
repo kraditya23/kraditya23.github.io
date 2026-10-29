@@ -33,6 +33,7 @@ const titleId = `project-${p.id}`;
         ))}
       </dl>
     )}
+    {p.metricsNote && <p class="metrics-note">{p.metricsNote}</p>}
 
     {p.bullets && p.bullets.length > 0 && (
       <ul class="bul">
@@ -167,6 +168,14 @@ const titleId = `project-${p.id}`;
     margin-top: 4px;
     color: var(--mute);
     font-size: 12.5px;
+  }
+
+  .metrics-note {
+    margin: 10px 0 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.55;
   }
 
   .bul {

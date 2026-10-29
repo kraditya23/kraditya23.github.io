@@ -18,44 +18,53 @@ export interface Project {
   /** HTML */
   lede: string;
   metrics?: { value: string; label: string }[];
+  /** Small print under the metrics (method, caveats). */
+  metricsNote?: string;
   /** HTML */
   bullets?: string[];
   chips: string[];
   links: Link[];
 }
 
-// Benchmark run 1 (one wall-clock timer around all operations). Also shown in the hero terminal.
+// Interim harness (bench/lob_benchmark.cpp), median of 11 runs. Also shown in the hero terminal.
 export const lobBench = {
   command: './lob_benchmark',
-  build: 'g++ -O3 -march=native',
+  build: 'clang++ -O3 -march=native',
   machine: 'MacBook Air (M3), single thread',
   warmup: '100,000 orders',
   ops: '500,000',
   levels: '5,000 / side',
-  throughput: '6.8M ops/s',
-  perOp: '~147 ns/op',
+  runs: '11 · median',
+  throughput: '6.1M ops/s',
+  mean: '163 ns/op',
+  p99: '≤ 542 ns',
 };
 
 export const lob: Project = {
   id: 'lob',
   meta: 'C++20 · systems',
-  status: 'In progress',
+  status: 'Matching core complete',
   statusLive: true,
   title: 'Limit Order Book Engine',
-  lede: 'A low-latency matching core with price-time priority, crossing limit orders and market orders, built on intrusive data structures and preallocated memory pools.',
+  lede: 'A C++20 limit order book and matching engine with strict price-time priority, fixed-point prices and data structures chosen for predictable, cache-friendly latency.',
   metrics: [
-    { value: '6.8M+', label: 'ops / second' },
-    { value: '~147 ns', label: 'avg per op' },
-    { value: 'O(1)', label: 'avg order lookup' },
+    { value: '6.1M', label: 'ops / sec' },
+    { value: '163 ns', label: 'mean per op' },
+    { value: '≤ 542 ns', label: 'p99 per op' },
   ],
+  metricsNote:
+    'Median of 11 runs: 500K mixed ops on a 100K-order book over 5,000 levels per side, single thread on an Apple M3. p99 includes timer overhead, so it is an upper bound.',
   bullets: [
-    'Separate bid/ask price trees (intrusive AVL), each level holding a FIFO queue for time priority',
-    'Aligned memory pools (free list + bump pointer) for orders and price levels',
-    'One <code>sweep()</code> path matches both crossing limit orders and market orders',
-    'Benchmarked on 500K mixed ops across 5,000 levels per side (MacBook Air M3, single thread)',
+    'Strict price-time priority: crossing limits sweep the book and rest the remainder, market orders fill IOC, and modifies follow exchange rules (size cuts keep queue position, reprices re-queue)',
+    'Each <code>PriceLevel</code> is both an AVL tree node and the head of an intrusive FIFO order queue, so a hash-mapped cancel is a pointer splice: O(1) average, O(log L) only when a level empties',
+    '64-byte <code>Order</code> and <code>PriceLevel</code> records, pinned by <code>static_assert</code>, come from fixed-capacity memory pools and are never individually heap-allocated',
+    'Fail-safe API: <code>[[nodiscard]]</code> status codes reject duplicate IDs, unknown IDs and zero quantities before any state changes; fills append to a caller-owned buffer; runs clean under ASan/UBSan',
   ],
-  chips: ['C++20', 'AVL trees', 'Memory pools', 'Benchmarking'],
-  links: [{ label: 'Source on GitHub', href: 'https://github.com/kraditya23/Limit-Order-Book' }],
+  chips: ['C++20', 'CMake', 'Intrusive AVL', 'Memory pools', 'ASan/UBSan'],
+  links: [
+    { label: 'Source on GitHub', href: 'https://github.com/kraditya23/Limit-Order-Book' },
+    { label: 'Benchmark method', href: 'https://github.com/kraditya23/Limit-Order-Book/blob/main/bench/lob_benchmark.cpp' },
+  ],
 };
 
 export const connecta: Project & { screenshot: { src360: string; src738: string; alt: string } } = {
