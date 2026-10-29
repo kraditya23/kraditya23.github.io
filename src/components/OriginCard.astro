@@ -1,0 +1,159 @@
+---
+// Origin note for the first game: quieter than a project card, links out to the playable build.
+import Icon from './Icon.astro';
+import { origin as o } from '../data/projects';
+---
+
+<article class="origin reveal" aria-labelledby="origin-title">
+  <a class="shot" href={o.playUrl} target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+    <img
+      src={o.image.src400}
+      srcset={`${o.image.src400} 400w, ${o.image.src800} 800w`}
+      sizes="(max-width: 700px) 100vw, 320px"
+      width={o.image.width}
+      height={o.image.height}
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="badge"><Icon name="play" size={18} /></span>
+  </a>
+  <div class="body">
+    <p class="kicker">{o.kicker}</p>
+    <h3 id="origin-title">{o.title}</h3>
+    <p class="meta">{o.meta}</p>
+    <p class="text" set:html={o.text} />
+    <div class="actions">
+      <a class="btn btn-ghost play" href={o.playUrl} target="_blank" rel="noopener">
+        <Icon name="play" size={14} />Play in browser<span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+      {o.sourceUrl && (
+        <a class="lnk lnk--muted" href={o.sourceUrl}>Source <Icon name="external" /></a>
+      )}
+    </div>
+    {o.note && <p class="note">{o.note}</p>}
+  </div>
+</article>
+
+<style>
+  .origin {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(20px, 3vw, 32px);
+    width: min(100%, 880px);
+    margin: 0 auto;
+    padding: clamp(16px, 2.4vw, 24px);
+    border: 1px dashed var(--line2);
+    border-radius: var(--radius-lg);
+  }
+
+  .shot {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--line2);
+    border-radius: var(--radius-sm);
+    background: var(--s1);
+  }
+
+  .shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.75) brightness(0.8);
+    transition:
+      filter 0.3s,
+      transform 0.5s var(--ease-out);
+  }
+
+  .origin:hover .shot img {
+    filter: none;
+  }
+
+  .badge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--line2);
+    border-radius: 50%;
+    background: rgb(6 10 19 / 0.78);
+    color: var(--ink);
+    transform: translate(-50%, -50%);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .origin:hover .badge {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .kicker {
+    margin: 0 0 8px;
+    color: var(--ask);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(22px, 2.2vw, 26px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  .meta {
+    margin: 6px 0 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+
+  .text {
+    margin: 12px 0 0;
+    color: var(--mute);
+    font-size: 15.5px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    margin-top: 16px;
+  }
+
+  .play {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .note {
+    margin: 10px 0 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .origin:hover .shot img {
+      transform: scale(1.03);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .origin {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import { site } from '../src/data/site';
+import { origin } from '../src/data/projects';
 
 const headline = site.hero.headline.map((line) => line.map((w) => w.text).join(' ')).join(' ');
 const hasResume = fs.existsSync(new URL(`../public/${site.resumeFile}`, import.meta.url));
@@ -77,6 +78,25 @@ test.describe('page basics', () => {
   test('the Connecta screenshot loads', async ({ page }) => {
     await page.goto('/');
     const img = page.getByRole('img', { name: /Connecta’s share screen/ });
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth)).toBeGreaterThan(0);
+  });
+});
+
+test.describe('origin note', () => {
+  test('links out to the playable build; the thumbnail is a decorative duplicate', async ({ page }) => {
+    await page.goto('/#projects');
+    const play = page.getByRole('link', { name: /Play in browser/ });
+    await expect(play).toHaveAttribute('href', origin.playUrl);
+    await expect(play).toHaveAttribute('target', '_blank');
+    await expect(play).toHaveAttribute('rel', /noopener/);
+    await expect(page.getByRole('heading', { level: 3, name: origin.title })).toBeVisible();
+
+    const shot = page.locator('.origin .shot');
+    await expect(shot).toHaveAttribute('href', origin.playUrl);
+    await expect(shot).toHaveAttribute('aria-hidden', 'true');
+    await expect(shot).toHaveAttribute('tabindex', '-1');
+    const img = shot.locator('img');
     await img.scrollIntoViewIfNeeded();
     await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth)).toBeGreaterThan(0);
   });

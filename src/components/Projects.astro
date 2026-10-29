@@ -3,8 +3,8 @@ import SectionHead from './SectionHead.astro';
 import ProjectCard from './ProjectCard.astro';
 import OrderBookLadder from './visuals/OrderBookLadder.astro';
 import PhoneShot from './visuals/PhoneShot.astro';
-import GameFrame from './visuals/GameFrame.astro';
-import { lob, connecta, game } from '../data/projects';
+import OriginCard from './OriginCard.astro';
+import { lob, connecta } from '../data/projects';
 
 interface Props {
   index: number;
@@ -28,9 +28,7 @@ const { index } = Astro.props;
         <PhoneShot {...connecta.screenshot} />
       </ProjectCard>
 
-      <ProjectCard project={game} side="left">
-        <GameFrame title={game.title} repoName={game.repoName} year={game.year} playUrl={game.playUrl} />
-      </ProjectCard>
+      <OriginCard />
     </div>
   </div>
 </section>

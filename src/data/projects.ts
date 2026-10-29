@@ -92,18 +92,21 @@ export const connecta: Project & { screenshot: { src360: string; src738: string;
   },
 };
 
-export const game: Project & { repoName: string; year: string; playUrl: string } = {
-  id: 'game',
+// The first game: shown as a short origin note at the end of Projects, not as a project card.
+export const origin = {
   kicker: 'Where it all started',
-  meta: 'Unity · C# · 2021',
-  status: 'Remaster in progress',
   title: 'Bringing a Gun to a Sword Fight',
-  lede: 'A boss-fight game I built in Unity back in Class 10, rough edges and all. It’s getting a Unity 6 remaster so you can play it right here in the browser.',
-  chips: ['Unity', 'C#', 'WebGL (planned)'],
+  meta: 'Unity · C# · built 2021, remastered 2026',
+  // HTML
+  text: 'The first game I ever built: a boss fight I made in Class 10 while learning Unity from Brackeys tutorials. Remastered in Unity 6 in 2026 so it runs in the browser. The gameplay might be broken; the fun isn’t.',
+  playUrl: 'https://kraditya23.github.io/bringing-gun-to-a-sword-fight/',
   // Empty hides the link.
-  links: [{ label: 'Source', href: 'https://github.com/kraditya23/bringing-gun-to-a-sword-fight' }],
-  repoName: 'bringing-gun-to-a-sword-fight',
-  year: '2021',
-  // Set to the hosted WebGL build to turn "coming soon" into a Play link.
-  playUrl: '',
+  sourceUrl: 'https://github.com/kraditya23/bringing-gun-to-a-sword-fight',
+  note: 'Desktop browser + keyboard',
+  image: {
+    src400: '/projects/game/boss-fight-400.webp',
+    src800: '/projects/game/boss-fight-800.webp',
+    width: 800,
+    height: 450,
+  },
 };
