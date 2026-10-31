@@ -2,7 +2,7 @@
   "platform": "leetcode",
   "handle": "kraditya23",
   "profileUrl": "https://leetcode.com/u/kraditya23/",
-  "fetchedAt": "2026-10-29T13:38:59.108Z",
+  "fetchedAt": "2026-10-31T08:34:14.280Z",
   "sources": [
     "https://leetcode.com/graphql"
   ],
@@ -10,9 +10,9 @@
     "current": 1861.693,
     "max": 1861.693,
     "title": "Knight",
-    "globalRank": 52420,
-    "participants": 889290,
-    "topPercent": 6.04
+    "globalRank": 52662,
+    "participants": 890724,
+    "topPercent": 6.06
   },
   "contests": [
     {
@@ -243,7 +243,7 @@
     }
   ],
   "solved": {
-    "total": 463,
+    "total": 465,
     "byDifficulty": [
       {
         "label": "Easy",
@@ -251,17 +251,17 @@
       },
       {
         "label": "Medium",
-        "count": 253
+        "count": 254
       },
       {
         "label": "Hard",
-        "count": 59
+        "count": 60
       }
     ],
     "byTag": [
       {
         "name": "Array",
-        "count": 243
+        "count": 245
       },
       {
         "name": "Dynamic Programming",
@@ -281,11 +281,15 @@
       },
       {
         "name": "Sorting",
-        "count": 58
+        "count": 59
       },
       {
         "name": "Database",
         "count": 52
+      },
+      {
+        "name": "Binary Search",
+        "count": 48
       },
       {
         "name": "Greedy",
@@ -294,15 +298,10 @@
       {
         "name": "Two Pointers",
         "count": 47
-      },
-      {
-        "name": "Binary Search",
-        "count": 46
       }
     ]
   },
   "activity": {
-    "2025-10-31": 5,
     "2026-01-06": 1,
     "2026-01-14": 8,
     "2026-01-15": 15,
@@ -455,6 +454,7 @@
     "2026-08-17": 2,
     "2026-08-20": 8,
     "2026-09-27": 2,
-    "2026-09-28": 1
+    "2026-09-28": 1,
+    "2026-10-30": 11
   }
 }
