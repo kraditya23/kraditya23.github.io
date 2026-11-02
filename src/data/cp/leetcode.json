@@ -2,7 +2,7 @@
   "platform": "leetcode",
   "handle": "kraditya23",
   "profileUrl": "https://leetcode.com/u/kraditya23/",
-  "fetchedAt": "2026-10-31T08:34:14.280Z",
+  "fetchedAt": "2026-11-02T09:40:49.803Z",
   "sources": [
     "https://leetcode.com/graphql"
   ],
@@ -243,15 +243,15 @@
     }
   ],
   "solved": {
-    "total": 465,
+    "total": 468,
     "byDifficulty": [
       {
         "label": "Easy",
-        "count": 151
+        "count": 153
       },
       {
         "label": "Medium",
-        "count": 254
+        "count": 255
       },
       {
         "label": "Hard",
@@ -264,12 +264,12 @@
         "count": 245
       },
       {
-        "name": "Dynamic Programming",
-        "count": 80
+        "name": "String",
+        "count": 81
       },
       {
-        "name": "String",
-        "count": 78
+        "name": "Dynamic Programming",
+        "count": 80
       },
       {
         "name": "Math",
@@ -297,7 +297,7 @@
       },
       {
         "name": "Two Pointers",
-        "count": 47
+        "count": 48
       }
     ]
   },
@@ -455,6 +455,7 @@
     "2026-08-20": 8,
     "2026-09-27": 2,
     "2026-09-28": 1,
-    "2026-10-30": 11
+    "2026-10-30": 11,
+    "2026-11-01": 4
   }
 }
