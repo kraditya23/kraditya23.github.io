@@ -8,6 +8,13 @@ export interface Word {
   style?: 'accent' | 'underline';
 }
 
+export interface SkillGroup {
+  title: string;
+  blurb: string;
+  /** icon: file name in src/assets/skills/ without .svg. */
+  items: { name: string; icon: string }[];
+}
+
 export const site = {
   name: 'Aditya Kumar',
   handle: 'kraditya23',
@@ -74,23 +81,56 @@ export const site = {
   },
 
   skills: [
-    { title: 'Languages', blurb: 'What I think in', items: ['C++20/23', 'Python', 'Dart', 'SQL', 'C#'] },
     {
-      title: 'Algorithms & systems',
-      blurb: 'Where the nanoseconds go',
-      items: ['Algorithms & DS', 'Memory pools', 'Intrusive containers', 'Benchmarking'],
-    },
-    {
-      title: 'Apps & backend',
-      blurb: 'Shipping real products',
-      items: ['Flutter', 'Riverpod', 'Supabase', 'PostgreSQL + RLS', 'Firebase', 'Google OAuth'],
+      title: 'Languages',
+      blurb: 'What I think in',
+      items: [
+        { name: 'C++20/23', icon: 'cplusplus' },
+        { name: 'C', icon: 'c' },
+        { name: 'Python', icon: 'python' },
+        { name: 'Dart', icon: 'dart' },
+        { name: 'C#', icon: 'csharp' },
+        { name: 'SQL', icon: 'table' },
+      ],
     },
     {
       title: 'Tools & foundations',
       blurb: 'Everything around the code',
-      items: ['Git', 'Linux / macOS', 'VS Code', 'Unity', 'ML / DL', 'Discrete math'],
+      items: [
+        { name: 'Git', icon: 'git' },
+        { name: 'GitHub', icon: 'github' },
+        { name: 'Linux', icon: 'linux' },
+        { name: 'CMake', icon: 'cmake' },
+        { name: 'ML/DL', icon: 'neural-net' },
+      ],
     },
-  ],
+    {
+      title: 'Apps & backend',
+      blurb: 'Shipping real products',
+      items: [
+        { name: 'Flutter', icon: 'flutter' },
+        { name: 'Riverpod', icon: 'waves' },
+        { name: 'Android', icon: 'android' },
+        { name: 'PostgreSQL', icon: 'postgresql' },
+        { name: 'Supabase', icon: 'supabase' },
+        { name: 'Firebase', icon: 'firebase' },
+        { name: 'OAuth', icon: 'key' },
+      ],
+    },
+    {
+      title: 'Core concepts',
+      blurb: 'What the code stands on',
+      items: [
+        { name: 'Data structures and algorithms', icon: 'tree' },
+        { name: 'Object-oriented programming', icon: 'cube' },
+        { name: 'Database management systems', icon: 'database' },
+        { name: 'Operating systems', icon: 'chip' },
+        { name: 'Multithreading', icon: 'threads' },
+        { name: 'Concurrency', icon: 'lock' },
+        { name: 'Computer networks', icon: 'globe' },
+      ],
+    },
+  ] as SkillGroup[],
 
   // Strip under the skills. Empty list hides it.
   now: {

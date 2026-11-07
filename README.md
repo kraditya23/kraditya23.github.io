@@ -85,4 +85,6 @@ also covers the account's project sites, so `<user>.github.io/<repo>` redirects 
 
 - Astro 7 drops line breaks next to inline elements (`<b>`, `<code>`, `<a>`); keep them on the same line as the
   surrounding words.
+- Skill icons live in `src/assets/skills/`; an item's `icon` in `src/data/site.ts` is the file name. Logo credits:
+  `src/assets/skills/NOTICE.md`.
 - `playwright-core` is overridden to match `@playwright/test` so the axe integration shares one Playwright.

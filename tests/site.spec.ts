@@ -84,6 +84,20 @@ test.describe('page basics', () => {
   });
 });
 
+test.describe('skills', () => {
+  test('every group lists its skills, each with a decorative icon', async ({ page }) => {
+    await page.goto('/#skills');
+    const cards = page.locator('#skills .sk');
+    await expect(cards).toHaveCount(site.skills.length);
+    for (const [i, group] of site.skills.entries()) {
+      const card = cards.nth(i);
+      await expect(card.getByRole('heading', { level: 3 })).toHaveText(group.title);
+      await expect(card.getByRole('listitem')).toHaveText(group.items.map((item) => item.name));
+      await expect(card.locator('.ico > svg[aria-hidden="true"]')).toHaveCount(group.items.length);
+    }
+  });
+});
+
 test.describe('origin note', () => {
   test('links out to the playable build; the thumbnail is a decorative duplicate', async ({ page }) => {
     await page.goto('/#projects');
@@ -383,6 +397,13 @@ test.describe('responsive layout', () => {
           proj: cols('article.proj'),
           cp: cols('.cp'),
           skills: cols('.skills-grid'),
+          // Skill names that spill past their card's padding.
+          spill: [...document.querySelectorAll<HTMLElement>('#skills .name')].filter((n) => {
+            const card = n.closest('.sk')!;
+            const range = document.createRange();
+            range.selectNodeContents(n);
+            return range.getBoundingClientRect().right > card.getBoundingClientRect().right - parseFloat(getComputedStyle(card).paddingRight) + 0.5;
+          }).map((n) => n.textContent),
           wide: [...document.querySelectorAll<HTMLElement>('main *')].filter((el) => el.getBoundingClientRect().right > document.documentElement.clientWidth + 1 && getComputedStyle(el).position !== 'fixed' && !el.closest('.hero .grid-bg, .hero .glow, .floor')).map((el) => el.className).slice(0, 5),
         };
       });
@@ -392,7 +413,8 @@ test.describe('responsive layout', () => {
       expect(m.header).toBeLessThanOrEqual(width <= 760 ? 120 : 80);
       expect(m.proj).toBe(width <= 960 ? 1 : 2);
       expect(m.cp).toBe(width <= 960 ? 1 : 2);
-      expect(m.skills).toBe(width <= 600 ? 1 : width <= 960 ? 2 : 4);
+      expect(m.skills).toBe(width <= 600 ? 1 : width < 1180 ? 2 : 4);
+      expect(m.spill).toEqual([]);
     });
   }
 });

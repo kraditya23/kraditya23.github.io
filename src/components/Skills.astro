@@ -8,6 +8,23 @@ interface Props {
 
 const { index } = Astro.props;
 const { skills, now } = site;
+
+const icons = import.meta.glob<string>('../assets/skills/*.svg', { query: '?raw', import: 'default', eager: true });
+
+// Embedded <metadata> (e.g. provenance manifests) stays in the source files, not in the page.
+function svgFor(name: string): string {
+  const svg = icons[`../assets/skills/${name}.svg`];
+  if (!svg) throw new Error(`Missing skill icon: src/assets/skills/${name}.svg`);
+  return svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '');
+}
+
+const icon = (name: string) => svgFor(name).replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+
+// Tile tint: the logo's first colour; line icons use the accent.
+const tint = (name: string) => svgFor(name).match(/(?:fill|stop-color)="(#[0-9a-fA-F]{3,6})"/)?.[1] ?? 'var(--accent-ink)';
+
+// Groups with short names pack into two columns on phones.
+const compact = (items: { name: string }[]) => items.every((item) => item.name.length <= 14);
 ---
 
 <section class="sec" id="skills" aria-labelledby="skills-title">
@@ -19,8 +36,13 @@ const { skills, now } = site;
         <div class="sk reveal" style={`--reveal-delay: ${i * 80}ms`}>
           <h3>{g.title}</h3>
           <p>{g.blurb}</p>
-          <ul class="chips">
-            {g.items.map((item) => <li class="chip">{item}</li>)}
+          <ul class:list={['skill-list', { 'skill-list--compact': compact(g.items) }]}>
+            {g.items.map((item) => (
+              <li class="skill">
+                <span class="ico" style={`--tint: ${tint(item.icon)}`} set:html={icon(item.icon)} />
+                <span class="name">{item.name}</span>
+              </li>
+            ))}
           </ul>
         </div>
       ))}
@@ -62,13 +84,49 @@ const { skills, now } = site;
   }
 
   .sk p {
-    margin: 0 0 18px;
+    margin: 0;
     color: var(--faint);
     font-size: 13.5px;
   }
 
-  .sk .chips {
-    margin-top: 0;
+  .skill-list {
+    display: grid;
+    gap: 10px;
+    margin: 20px 0 0;
+    padding: 20px 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .skill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 40px;
+  }
+
+  .ico {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid color-mix(in srgb, var(--tint) 24%, transparent);
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--tint) 9%, var(--s1));
+    color: var(--accent-ink);
+  }
+
+  .ico :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .name {
+    min-width: 0;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.3;
   }
 
   .now {
@@ -98,7 +156,7 @@ const { skills, now } = site;
     color: var(--line2);
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: 1179px) {
     .skills-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -107,6 +165,18 @@ const { skills, now } = site;
   @media (max-width: 600px) {
     .skills-grid {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sk {
+      padding: 20px;
+    }
+
+    .skill {
+      gap: 12px;
+    }
+
+    .skill-list--compact {
+      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
     }
   }
 </style>
