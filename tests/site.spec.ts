@@ -40,8 +40,9 @@ test.describe('page basics', () => {
     await expect(page).toHaveTitle(site.title);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(headline);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Delhi Technological University/);
-    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/og\.png$/);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /^https:\/\//);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', new URL('/og.png', site.url).href);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', new URL('/', site.url).href);
+    await expect(page.locator('footer')).toContainText(new URL(site.url).host);
     await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
 
     await scrollThrough(page);
@@ -65,7 +66,7 @@ test.describe('page basics', () => {
     }
     if (hasResume) expect((await request.get(`/${site.resumeFile}`)).headers()['content-type']).toContain('pdf');
     const robots = await (await request.get('/robots.txt')).text();
-    expect(robots).toMatch(/Sitemap: https:\/\/.+\/sitemap-index\.xml/);
+    expect(robots).toContain(`Sitemap: ${new URL('/sitemap-index.xml', site.url).href}`);
   });
 
   test('404 page renders with a way home', async ({ page }) => {

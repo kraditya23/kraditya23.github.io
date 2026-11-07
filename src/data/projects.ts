@@ -99,7 +99,7 @@ export const origin = {
   meta: 'Unity · C# · built 2021, remastered 2026',
   // HTML
   text: 'The first game I ever built: a boss fight I made in Class 10 while learning Unity from Brackeys tutorials. Remastered in Unity 6 in 2026 so it runs in the browser. The gameplay might be broken; the fun isn’t.',
-  playUrl: 'https://kraditya23.github.io/bringing-gun-to-a-sword-fight/',
+  playUrl: 'https://kraditya23.me/bringing-gun-to-a-sword-fight/',
   // Empty hides the link.
   sourceUrl: 'https://github.com/kraditya23/bringing-gun-to-a-sword-fight',
   note: 'Desktop browser + keyboard',

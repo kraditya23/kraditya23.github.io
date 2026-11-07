@@ -1,7 +1,7 @@
 # kraditya23 — portfolio
 
-Personal portfolio of Aditya Kumar. A single scrolling page built with [Astro](https://astro.build) as a static
-site and deployed to GitHub Pages.
+Personal portfolio of Aditya Kumar, live at [kraditya23.me](https://kraditya23.me). A single scrolling page built
+with [Astro](https://astro.build) as a static site and deployed to GitHub Pages.
 
 ## Requirements
 
@@ -76,9 +76,10 @@ Create a form at [formspree.io](https://formspree.io) and set its ID in `src/dat
 2. At the DNS provider, add A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    and a `www` CNAME to `<user>.github.io`.
 3. Set the domain under the repository's Pages settings and enable **Enforce HTTPS** once available.
-4. Update `url` in `src/data/site.ts`.
+4. Update `url` in `src/data/site.ts`; canonical URLs, sitemap, `robots.txt`, preview image and footer follow it.
 
-No `CNAME` file is needed; GitHub ignores it for Actions deployments.
+No `CNAME` file is needed; GitHub ignores it for Actions deployments. On a `<user>.github.io` repository the domain
+also covers the account's project sites, so `<user>.github.io/<repo>` redirects to `<domain>/<repo>`.
 
 ## Notes
 

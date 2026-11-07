@@ -12,7 +12,7 @@ export const site = {
   name: 'Aditya Kumar',
   handle: 'kraditya23',
   // Canonical origin: canonical URLs, sitemap, robots.txt, preview-image URLs.
-  url: 'https://kraditya23.github.io',
+  url: 'https://kraditya23.me',
   title: 'Aditya Kumar — C++ and low-latency systems',
   description:
     'Third-year IT student at Delhi Technological University building low-latency systems in C++, including a limit order book engine written from scratch.',
