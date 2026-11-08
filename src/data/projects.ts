@@ -26,7 +26,9 @@ export interface Project {
   links: Link[];
 }
 
-// Interim harness (bench/lob_benchmark.cpp), median of 11 runs. Also shown in the hero terminal.
+// Interim harness (bench/lob_benchmark.cpp); numbers from the repo README. Also shown in the hero terminal.
+const benchRuns = 13;
+
 export const lobBench = {
   command: './lob_benchmark',
   build: 'clang++ -O3 -march=native',
@@ -34,10 +36,11 @@ export const lobBench = {
   warmup: '100,000 orders',
   ops: '500,000',
   levels: '5,000 / side',
-  runs: '11 · median',
-  throughput: '6.1M ops/s',
-  mean: '163 ns/op',
-  p99: '≤ 542 ns',
+  runCount: benchRuns,
+  runs: `${benchRuns} · median`,
+  throughput: '6.6M ops/s',
+  mean: '151 ns/op',
+  p99: '≤ 417 ns',
 };
 
 export const lob: Project = {
@@ -48,12 +51,12 @@ export const lob: Project = {
   title: 'Limit Order Book Engine',
   lede: 'A C++20 limit order book and matching engine with strict price-time priority, fixed-point prices and data structures chosen for predictable, cache-friendly latency.',
   metrics: [
-    { value: '6.1M', label: 'ops / sec' },
-    { value: '163 ns', label: 'mean per op' },
-    { value: '≤ 542 ns', label: 'p99 per op' },
+    { value: '6.6M', label: 'ops / sec' },
+    { value: '151 ns', label: 'mean per op' },
+    { value: '≤ 417 ns', label: 'p99 per op' },
   ],
   metricsNote:
-    'Median of 11 runs: 500K mixed ops on a 100K-order book over 5,000 levels per side, single thread on an Apple M3. p99 includes timer overhead, so it is an upper bound.',
+    `Median of ${benchRuns} runs: 500K mixed ops on a 100K-order book over 5,000 levels per side, single thread on an Apple M3. p99 includes timer overhead, so it is an upper bound.`,
   bullets: [
     'Strict price-time priority: crossing limits sweep the book and rest the remainder, market orders fill IOC, and modifies follow exchange rules (size cuts keep queue position, reprices re-queue)',
     'Each <code>PriceLevel</code> is both an AVL tree node and the head of an intrusive FIFO order queue, so a hash-mapped cancel is a pointer splice: O(1) average, O(log L) only when a level empties',

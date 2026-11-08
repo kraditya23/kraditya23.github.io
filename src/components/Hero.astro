@@ -88,7 +88,7 @@ const promptDelay = 2200 + rows.length * 150;
           </dl>
           <p class="t-prompt load" style={`--d: ${promptDelay}ms`} aria-hidden="true"><span class="t-p">$ </span><span class="t-cur"></span></p>
         </div>
-        <figcaption class="visually-hidden">Order book engine benchmark, median of 11 runs on a {lobBench.machine}; p99 is an upper bound.</figcaption>
+        <figcaption class="visually-hidden">Order book engine benchmark, median of {lobBench.runCount} runs on a {lobBench.machine}; p99 is an upper bound.</figcaption>
       </figure>
     </div>
 
