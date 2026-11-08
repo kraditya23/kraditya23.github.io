@@ -30,8 +30,8 @@ export const site = {
   // File in public/. Résumé links render only if it exists.
   resumeFile: 'resume.pdf',
 
-  // Formspree form ID (formspree.io/f/<id>). Empty shows an email card instead of the form.
-  formspreeId: '',
+  // Formspree form ID (formspree.io/f/<id>). Empty hides the form.
+  formspreeId: 'xwlljala',
 
   // Profile links. An empty string hides a link.
   links: {

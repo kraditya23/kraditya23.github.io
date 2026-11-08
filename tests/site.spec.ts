@@ -98,6 +98,26 @@ test.describe('skills', () => {
   });
 });
 
+test.describe('contact links', () => {
+  test('only GitHub, LinkedIn and email, and the icons light up on hover', async ({ page }) => {
+    await page.goto('/#contact');
+    const contact = page.locator('#contact');
+    await expect(contact.getByRole('heading', { level: 2 })).toHaveText('Let’s connect.');
+    await expect(contact.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', site.links.github);
+    await expect(contact.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', site.links.linkedin);
+    await expect(contact.getByRole('link', { name: site.email, exact: true })).toHaveAttribute('href', `mailto:${site.email}`);
+    for (const name of ['LeetCode', 'Codeforces', 'CodeChef']) await expect(contact.getByRole('link', { name })).toHaveCount(0);
+
+    const icon = contact.locator('a.ic').first();
+    const look = () => icon.evaluate((a) => ({ color: getComputedStyle(a).color, filter: getComputedStyle(a.querySelector('svg')!).filter }));
+    const rest = await look();
+    expect(rest.filter).toBe('none');
+    await icon.hover();
+    await expect.poll(async () => (await look()).filter).toContain('drop-shadow');
+    await expect.poll(async () => (await look()).color).not.toBe(rest.color);
+  });
+});
+
 test.describe('origin note', () => {
   test('links out to the playable build; the thumbnail is a decorative duplicate', async ({ page }) => {
     await page.goto('/#projects');
@@ -323,6 +343,7 @@ test.describe('contact form', () => {
     expect(body).toContain('Test Recruiter');
     expect(body).toContain('recruiter@example.com');
     expect(body).toContain('_gotcha');
+    expect(body).toContain('New message from {{ name }} via');
     await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
   });
 

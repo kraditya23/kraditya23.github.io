@@ -2,7 +2,6 @@
 import SectionHead from './SectionHead.astro';
 import Icon from './Icon.astro';
 import { site } from '../data/site';
-import { hasPublicFile } from '../lib/files';
 
 interface Props {
   index: number;
@@ -12,52 +11,45 @@ const { index } = Astro.props;
 
 // PUBLIC_FORMSPREE_ID overrides site.formspreeId (used by the e2e tests).
 const formId = (import.meta.env.PUBLIC_FORMSPREE_ID as string | undefined) || site.formspreeId;
-const resume = hasPublicFile(site.resumeFile) ? `/${site.resumeFile}` : '';
-const strip = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-
-const socials = [
-  { name: 'GitHub', href: site.links.github },
-  { name: 'LinkedIn', href: site.links.linkedin },
-  { name: 'LeetCode', href: site.links.leetcode },
-  { name: 'Codeforces', href: site.links.codeforces },
-  { name: 'CodeChef', href: site.links.codechef },
-]
-  .filter((s) => s.href)
-  .map((s) => ({ ...s, handle: strip(s.href).split('/').at(-1) ?? strip(s.href) }));
-
-const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle: site.email } : undefined;
+// Formspree fills {{ name }} from the submission.
+const subject = `New message from {{ name }} via ${new URL(site.url).host}`;
+// CP profiles live in the CP section; only these two are repeated here.
+const profiles = (
+  [
+    { name: 'GitHub', href: site.links.github, icon: 'github' },
+    { name: 'LinkedIn', href: site.links.linkedin, icon: 'linkedin' },
+  ] as const
+).filter((p) => p.href);
 ---
 
 <section class="sec" id="contact" aria-labelledby="contact-title">
   <div class="wrap">
     <SectionHead index={index} label="Contact" />
-    <div class="contact-grid">
-      <div>
-        <h2 class="h2 reveal reveal--mask" id="contact-title"><span>Let’s build something <span class="hl">fast</span>.</span></h2>
+    <div class:list={['contact-grid', { 'contact-grid--solo': !formId }]}>
+      <div class="intro">
+        <h2 class="h2 reveal reveal--mask" id="contact-title"><span>Let’s <span class="hl">connect</span>.</span></h2>
         <p class="sub reveal">Hiring for SWE or quant-dev internships, want to talk low-latency C++, or have a contest problem that’s been bugging you? My inbox is open.</p>
-        <ul class="socials reveal">
-          {socials.map((s) => (
+        <ul class="connect reveal">
+          {profiles.map((p) => (
             <li>
-              <a class="soc" href={s.href} rel="me noopener">
-                <span class="soc-name">{s.name}</span>
-                <span class="soc-handle">{s.handle}</span>
-                <Icon name="external" />
+              <a class="ic" href={p.href} rel="me noopener" title={p.name}>
+                <Icon name={p.icon} size={28} stroke={1.75} />
+                <span class="visually-hidden">{p.name}</span>
               </a>
             </li>
           ))}
-          {email && (
-            <li>
-              <a class="soc" href={email.href}>
-                <span class="soc-name">{email.name}</span>
-                <span class="soc-handle">{email.handle}</span>
-                <Icon name="external" />
+          {site.email && (
+            <li class="mail-item">
+              <a class="mail" href={`mailto:${site.email}`}>
+                <Icon name="mail" size={24} stroke={1.75} />
+                <span>{site.email}</span>
               </a>
             </li>
           )}
         </ul>
       </div>
 
-      {formId ? (
+      {formId && (
         <form
           class="card form reveal reveal--right"
           action={`https://formspree.io/f/${formId}`}
@@ -89,6 +81,7 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
             <label for="cf-message">Message</label>
             <textarea id="cf-message" name="message" rows="5" placeholder="What’s on your mind?" required maxlength="5000"></textarea>
           </div>
+          <input type="hidden" name="subject" value={subject} />
           <div class="gotcha" aria-hidden="true">
             <label for="cf-gotcha">Leave this empty</label>
             <input id="cf-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
@@ -101,21 +94,6 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
             </button>
           </div>
         </form>
-      ) : (
-        <div class="card form reveal reveal--right">
-          <h3 class="card-label">Get in touch</h3>
-          <p class="fallback">
-            {site.email ? 'The quickest way to reach me is email.' : 'The quickest way to reach me is LinkedIn.'}
-          </p>
-          <div class="ctas">
-            {site.email ? (
-              <a class="btn btn-primary" href={`mailto:${site.email}`}>Email me <Icon name="send" /></a>
-            ) : (
-              site.links.linkedin && <a class="btn btn-primary" href={site.links.linkedin}>Message me on LinkedIn <Icon name="external" /></a>
-            )}
-            {resume && <a class="btn btn-ghost" href={resume}>Résumé (PDF)</a>}
-          </div>
-        </div>
       )}
     </div>
   </div>
@@ -135,62 +113,85 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
     gap: clamp(36px, 5vw, 72px);
   }
 
-  .socials {
+  .contact-grid--solo {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  .contact-grid--solo .sub {
+    margin-inline: auto;
+  }
+
+  .connect {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     margin: 36px 0 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--line);
   }
 
-  .socials li {
-    border-bottom: 1px solid var(--line);
+  .contact-grid--solo .connect {
+    justify-content: center;
   }
 
-  .soc {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-height: 54px;
-    padding: 12px 4px;
-    color: var(--ink);
-    text-decoration: none;
-    transition:
-      color 0.2s,
-      padding 0.25s;
+  /* Line the first icon up with the text above it. */
+  .contact-grid:not(.contact-grid--solo) .connect {
+    margin-left: -12px;
   }
 
-  .soc:hover {
-    padding-left: 12px;
-    color: var(--accent-ink);
-  }
-
-  .soc-name {
-    font-weight: 500;
-  }
-
-  .soc-handle {
-    min-width: 0;
-    margin-left: auto;
-    overflow: hidden;
+  .ic,
+  .mail {
+    --glow: drop-shadow(0 0 5px rgb(47 124 255 / 0.85)) drop-shadow(0 0 14px rgb(47 124 255 / 0.45));
     color: var(--mute);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    text-align: right;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.25s ease;
   }
 
-  .soc :global(svg) {
+  .ic {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+  }
+
+  .ic :global(svg),
+  .mail :global(svg) {
     flex: none;
-    color: var(--faint);
-    transition:
-      transform 0.2s,
-      color 0.2s;
+    transition: filter 0.25s ease;
   }
 
-  .soc:hover :global(svg) {
+  .ic:is(:hover, :focus-visible),
+  .mail:is(:hover, :focus-visible) {
     color: var(--accent-ink);
-    transform: translate(2px, -2px);
+  }
+
+  .ic:is(:hover, :focus-visible) :global(svg),
+  .mail:is(:hover, :focus-visible) :global(svg) {
+    filter: var(--glow);
+  }
+
+  .mail-item {
+    margin-left: 8px;
+    padding-left: 16px;
+    border-left: 1px solid var(--line2);
+  }
+
+  .mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 15px;
+  }
+
+  .mail:is(:hover, :focus-visible) span {
+    text-shadow: 0 0 14px rgb(47 124 255 / 0.55);
   }
 
   .form {
@@ -247,6 +248,26 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
     resize: vertical;
   }
 
+  /* Own chevron: the native arrow ignores padding and sits on the edge in Safari and Chrome on macOS. */
+  .fld select {
+    padding-right: 44px;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397a3bc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .fld select:focus-visible {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237db2ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  @media (forced-colors: active) {
+    .fld select {
+      padding-right: 14px;
+      background-image: none;
+      appearance: auto;
+    }
+  }
+
   .fld :is(input, textarea, select):focus-visible {
     border-color: var(--accent);
     border-radius: var(--radius-sm);
@@ -290,17 +311,6 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
     color: var(--ask);
   }
 
-  .fallback {
-    margin: 0;
-    color: var(--mute);
-  }
-
-  .ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
   @media (max-width: 960px) {
     .contact-grid {
       grid-template-columns: minmax(0, 1fr);
@@ -310,6 +320,16 @@ const email = site.email ? { name: 'Email', href: `mailto:${site.email}`, handle
   @media (max-width: 600px) {
     .row2 {
       grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Phones: the email gets its own line under the icons. */
+  @media (max-width: 520px) {
+    .mail-item {
+      flex-basis: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
     }
   }
 </style>
