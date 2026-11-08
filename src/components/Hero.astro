@@ -2,8 +2,13 @@
 import Icon from './Icon.astro';
 import { site } from '../data/site';
 import { lobBench } from '../data/projects';
+import { hasPublicFile } from '../lib/files';
 
 const { hero } = site;
+const resume = hasPublicFile(site.resumeFile) ? `/${site.resumeFile}` : '';
+
+// A short last headline line leaves room on its right: the terminal moves up beside it.
+const tuck = hero.headline.at(-1)!.map((w) => w.text).join(' ').length <= 8;
 
 // Staggered delay per headline word.
 let delay = 180;
@@ -58,12 +63,14 @@ const promptDelay = 2200 + rows.length * 150;
       ))}
     </h1>
 
-    <div class="hero-row">
+    <div class:list={['hero-row', { 'hero-row--tuck': tuck }]}>
       <div class="load" style="--d: 900ms">
         <p class="lede" set:html={hero.lede} />
         <div class="ctas">
-          <a class="btn btn-primary" href="#projects">See the work <Icon name="arrow-down" /></a>
-          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+          {resume && (
+            <a class="btn btn-primary" href={resume} target="_blank" rel="noopener">Résumé <Icon name="external" /><span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
+          )}
+          <a class:list={['btn', resume ? 'btn-ghost' : 'btn-primary']} href="#contact">Get in touch</a>
         </div>
       </div>
 
@@ -119,14 +126,17 @@ const promptDelay = 2200 + rows.length * 150;
   }
 
   .hero-in {
+    --punch: clamp(40px, min(9.4vw, 13.5vh), 124px);
+    --gap: clamp(20px, 3.2vh, 36px);
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 40px;
-    min-height: 720px;
-    padding-top: clamp(56px, 8vw, 104px);
-    padding-bottom: clamp(40px, 5vw, 64px);
+    gap: var(--gap);
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+    padding-top: clamp(20px, 4vh, 56px);
+    padding-bottom: clamp(16px, 3vh, 40px);
   }
 
   .eyebrow {
@@ -174,7 +184,7 @@ const promptDelay = 2200 + rows.length * 150;
     color: var(--ink);
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(40px, 9.4vw, 124px);
+    font-size: var(--punch);
     line-height: 0.98;
     letter-spacing: -0.035em;
   }
@@ -216,13 +226,19 @@ const promptDelay = 2200 + rows.length * 150;
   .hero-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
-    align-items: end;
-    gap: 40px;
+    align-items: start;
+    gap: 24px 40px;
+  }
+
+  /* Top of the terminal level with the cap height of the last headline line. */
+  .hero-row--tuck .term {
+    position: relative;
+    margin-top: calc(var(--punch) * -0.88 - var(--gap));
   }
 
   .lede {
     max-width: 560px;
-    margin: 0 0 28px;
+    margin: 0 0 24px;
     color: var(--mute);
     font-size: clamp(17px, 1.5vw, 20px);
     line-height: 1.6;
@@ -278,9 +294,9 @@ const promptDelay = 2200 + rows.length * 150;
   }
 
   .term-body {
-    padding: 16px 18px 18px;
+    padding: 14px 18px 16px;
     color: var(--mute);
-    line-height: 1.85;
+    line-height: 1.7;
   }
 
   .term-body p,
@@ -464,6 +480,10 @@ const promptDelay = 2200 + rows.length * 150;
   @media (max-width: 960px) {
     .hero-row {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-row--tuck .term {
+      margin-top: 0;
     }
   }
 

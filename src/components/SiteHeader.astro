@@ -141,13 +141,14 @@ const links = [
     font-size: 14px;
     text-decoration: none;
     transition:
-      color 0.2s,
-      background-color 0.2s;
+      color 0.25s ease,
+      text-shadow 0.25s ease;
   }
 
-  .nav-links a:hover {
-    color: var(--ink);
-    background: rgb(125 160 255 / 0.08);
+  /* Same glow as the contact links. */
+  .nav-links a:is(:hover, :focus-visible) {
+    color: var(--accent-ink);
+    text-shadow: 0 0 14px rgb(47 124 255 / 0.55);
   }
 
   .nav-cta {

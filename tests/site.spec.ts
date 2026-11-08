@@ -112,6 +112,48 @@ test.describe('page basics', () => {
   });
 });
 
+test.describe('hero', () => {
+  for (const [width, height] of [[1470, 842], [1440, 789], [1366, 657], [1280, 680], [1920, 969]]) {
+    test(`${width}x${height}: headline, intro, buttons and benchmark fit the first screen`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto('/');
+      for (const sel of ['.punch', '.hero .lede', '.hero .ctas', '.hero .term']) {
+        const box = (await page.locator(sel).boundingBox())!;
+        expect(box.y + box.height, sel).toBeLessThanOrEqual(height);
+      }
+    });
+  }
+
+  test('buttons: résumé in a new tab and a way to get in touch', async ({ page }) => {
+    await page.goto('/');
+    const ctas = page.locator('.hero .ctas');
+    await expect(ctas.getByRole('link', { name: /See the work/ })).toHaveCount(0);
+    await expect(ctas.getByRole('link', { name: 'Get in touch' })).toHaveAttribute('href', '#contact');
+    const resume = ctas.getByRole('link', { name: /Résumé/ });
+    if (hasResume) {
+      await expect(resume).toHaveAttribute('href', `/${site.resumeFile}`);
+      await expect(resume).toHaveAttribute('target', '_blank');
+    } else {
+      await expect(resume).toHaveCount(0);
+    }
+  });
+});
+
+test.describe('section navigation', () => {
+  test('links glow blue on hover instead of showing a button background', async ({ page }) => {
+    await page.goto('/');
+    const link = page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'Skills', exact: true });
+    const look = () => link.evaluate((a) => ({ color: getComputedStyle(a).color, shadow: getComputedStyle(a).textShadow, bg: getComputedStyle(a).backgroundColor }));
+    const rest = await look();
+    expect(rest.shadow).toBe('none');
+    await link.hover();
+    await expect.poll(async () => (await look()).shadow).toContain('rgba(47, 124, 255');
+    const hover = await look();
+    expect(hover.color).not.toBe(rest.color);
+    expect(hover.bg).toBe(rest.bg);
+  });
+});
+
 test.describe('skills', () => {
   test('every group lists its skills, each with a decorative icon', async ({ page }) => {
     await page.goto('/#skills');
@@ -174,23 +216,22 @@ test.describe('navigation and keyboard', () => {
       ['Skills', 'skills'],
       ['Contact', 'contact'],
     ]) {
-      test(`${width}px: nav link "${label}" lands its section right below the sticky header`, async ({ page }) => {
+      test(`${width}px: nav link "${label}" lands its section label just below the sticky header`, async ({ page }) => {
         await page.setViewportSize({ width, height: 800 });
         await page.goto('/');
         await page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: label, exact: true }).click();
         await expect(page).toHaveURL(new RegExp(`#${id}$`));
         const header = (await page.locator('header.nav').boundingBox())!.height;
-        // Wait for the smooth scroll to settle with the section starting just under the header.
+        // Wait for the smooth scroll to settle with the label (not the section's top padding) under the header.
         await expect
           .poll(
             async () => {
-              const y = (await page.locator(`#${id}`).boundingBox())!.y;
-              return y >= header - 1 && y <= header + 8 ? 'below header' : `at ${Math.round(y)} (header ${Math.round(header)})`;
+              const y = (await page.locator(`#${id} .sec-head`).boundingBox())!.y;
+              return y >= header + 16 && y <= header + 48 ? 'below header' : `at ${Math.round(y)} (header ${Math.round(header)})`;
             },
             { timeout: 8000 },
           )
           .toBe('below header');
-        await expect(page.locator(`#${id} .sec-head`)).toBeInViewport();
       });
     }
   }
@@ -225,9 +266,13 @@ test.describe('navigation and keyboard', () => {
       await expect(links).toHaveCount(0);
       return;
     }
-    const nav = page.getByRole('link', { name: /Résumé.*PDF, opens in a new tab/ });
-    await expect(nav).toHaveAttribute('href', `/${site.resumeFile}`);
-    await expect(nav).toHaveAttribute('target', '_blank');
+    // Header and hero.
+    await expect(links).toHaveCount(2);
+    for (const link of await links.all()) {
+      await expect(link).toHaveAttribute('href', `/${site.resumeFile}`);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAccessibleName(/PDF, opens in a new tab/);
+    }
   });
 });
 

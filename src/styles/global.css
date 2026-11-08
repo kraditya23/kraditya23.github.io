@@ -28,6 +28,7 @@
   --wrap: 1200px;
   --gutter: clamp(16px, 4vw, 40px);
   --header-h: 65px; /* sticky header height, used as the anchor scroll offset */
+  --sec-pad: clamp(88px, 10vw, 140px); /* vertical padding of each section */
   --radius-lg: 22px;
   --radius-md: 16px;
   --radius-sm: 12px;
@@ -107,8 +108,12 @@ main:focus {
   border-radius: 4px;
 }
 
-section[id],
-[id='top'] {
+/* Section links land with the section label just under the header, not the top padding. */
+section[id] {
+  scroll-margin-top: calc(var(--header-h) + 28px - var(--sec-pad));
+}
+
+section[id='top'] {
   scroll-margin-top: var(--header-h);
 }
 
@@ -266,7 +271,7 @@ section[id],
 
 .sec {
   position: relative;
-  padding: clamp(88px, 10vw, 140px) 0;
+  padding: var(--sec-pad) 0;
   border-top: 1px solid var(--line);
 }
 
