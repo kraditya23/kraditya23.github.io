@@ -28,7 +28,7 @@ import { origin as o } from '../data/projects';
         <Icon name="play" size={14} />Play in browser<span class="visually-hidden"> (opens in a new tab)</span>
       </a>
       {o.sourceUrl && (
-        <a class="lnk lnk--muted" href={o.sourceUrl}>Source <Icon name="external" /></a>
+        <a class="lnk lnk--muted" href={o.sourceUrl} target="_blank" rel="noopener">Source <Icon name="external" /><span class="visually-hidden"> (opens in a new tab)</span></a>
       )}
     </div>
     {o.note && <p class="note">{o.note}</p>}

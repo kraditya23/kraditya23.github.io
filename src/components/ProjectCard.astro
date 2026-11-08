@@ -48,8 +48,8 @@ const titleId = `project-${p.id}`;
     {links.length > 0 && (
       <div class="links">
         {links.map((l, i) => (
-          <a class:list={['lnk', i > 0 && 'lnk--muted']} href={l.href} rel="noopener">
-            {l.label} <Icon name="external" />
+          <a class:list={['lnk', i > 0 && 'lnk--muted']} href={l.href} target="_blank" rel="noopener">
+            {l.label} <Icon name="external" /><span class="visually-hidden"> (opens in a new tab)</span>
           </a>
         ))}
       </div>

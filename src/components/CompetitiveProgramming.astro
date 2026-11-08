@@ -28,7 +28,7 @@ const namesText = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${nam
 <section class="sec" id="cp" aria-labelledby="cp-title">
   <div class="wrap">
     <SectionHead index={index} label="Competitive programming" />
-    <h2 class="h2 reveal reveal--mask" id="cp-title"><span>Ratings over adjectives.</span></h2>
+    <h2 class="h2 reveal reveal--mask" id="cp-title"><span>dy/dx over y</span></h2>
     {cp.intro && <p class="sub reveal" set:html={cp.intro} />}
 
     <div class="cp reveal" data-tabs>
@@ -56,8 +56,8 @@ const namesText = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${nam
             <p class="cp-num">{p.big}</p>
             <p class="cp-lbl">{p.bigLabel}</p>
             <p class="cp-note">{p.detail}</p>
-            <a class="lnk" href={p.snap.profileUrl}>
-              {p.profileText} <Icon name="external" />
+            <a class="lnk" href={p.snap.profileUrl} target="_blank" rel="noopener">
+              {p.profileText} <Icon name="external" /><span class="visually-hidden"> (opens in a new tab)</span>
             </a>
           </div>
         ))}

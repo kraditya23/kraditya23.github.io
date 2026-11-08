@@ -149,7 +149,8 @@ export const cpPlatforms: Record<'leetcode' | 'codeforces' | 'codechef', { enabl
 // Ratings and counts come from src/data/cp/ (npm run fetch:cp). Only extras live here.
 export const cp = {
   // HTML
-  intro: 'Competitive programming since school — it’s where I learned to think in constraints and edge cases.',
+  intro:
+    'Competitive programming since school — it’s where I learned to think in constraints and edge cases. I care more about the slope than the rating.',
   // Tiles next to the solved count. Empty list leaves just the solved count.
   extras: [
     { value: 'All-Kill', label: 'LeetCode Biweekly 185 · rank ~1,747 of 39K+' },

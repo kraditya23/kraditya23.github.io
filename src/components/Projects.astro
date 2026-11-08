@@ -16,8 +16,8 @@ const { index } = Astro.props;
 <section class="sec" id="projects" aria-labelledby="projects-title">
   <div class="wrap">
     <SectionHead index={index} label="Projects" />
-    <h2 class="h2 reveal reveal--mask" id="projects-title"><span>Things I’ve built.</span></h2>
-    <p class="sub reveal">Sorted by how many nanoseconds they care about. The last one is where it all started.</p>
+    <h2 class="h2 reveal reveal--mask" id="projects-title"><span>Hot path first</span></h2>
+    <p class="sub reveal">Sorted by how many nanoseconds they care about. The cold path at the bottom is where it all started.</p>
 
     <div class="projects">
       <ProjectCard project={lob} side="left">

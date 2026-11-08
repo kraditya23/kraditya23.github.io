@@ -59,6 +59,34 @@ test.describe('page basics', () => {
     expect(missing).toEqual([]);
   });
 
+  test('outside links open in a new tab and say so; page and mail links stay put', async ({ page }) => {
+    await page.goto('/');
+    const links = await page.locator('a[href]').evaluateAll((els) =>
+      els.map((a) => ({
+        href: a.getAttribute('href')!,
+        target: a.getAttribute('target'),
+        rel: a.getAttribute('rel') ?? '',
+        hidden: a.getAttribute('aria-hidden') === 'true',
+        text: a.textContent ?? '',
+      })),
+    );
+    const outside = links.filter((l) => /^https?:/.test(l.href));
+    expect(outside.length).toBeGreaterThan(5);
+    for (const l of outside) {
+      expect(l.target, l.href).toBe('_blank');
+      expect(l.rel, l.href).toContain('noopener');
+      if (!l.hidden) expect(l.text, l.href).toContain('new tab');
+    }
+    for (const l of links.filter((l) => /^(#|mailto:|\/$)/.test(l.href))) expect(l.target, l.href).toBeNull();
+  });
+
+  test('section headings have no full stop', async ({ page }) => {
+    await page.goto('/');
+    const headings = await page.locator('h2.h2').allTextContents();
+    expect(headings.length).toBeGreaterThan(3);
+    for (const h of headings) expect(h.trim(), h).not.toMatch(/\.$/);
+  });
+
   test('static files and generated routes are served', async ({ request }) => {
     for (const path of ['/og.png', '/favicon.svg', '/apple-touch-icon.png', '/sitemap-index.xml']) {
       const res = await request.get(path);
@@ -102,9 +130,9 @@ test.describe('contact links', () => {
   test('only GitHub, LinkedIn and email, and the icons light up on hover', async ({ page }) => {
     await page.goto('/#contact');
     const contact = page.locator('#contact');
-    await expect(contact.getByRole('heading', { level: 2 })).toHaveText('Let’s connect.');
-    await expect(contact.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', site.links.github);
-    await expect(contact.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', site.links.linkedin);
+    await expect(contact.getByRole('heading', { level: 2 })).toHaveText('Let’s connect');
+    await expect(contact.getByRole('link', { name: /^GitHub/ })).toHaveAttribute('href', site.links.github);
+    await expect(contact.getByRole('link', { name: /^LinkedIn/ })).toHaveAttribute('href', site.links.linkedin);
     await expect(contact.getByRole('link', { name: site.email, exact: true })).toHaveAttribute('href', `mailto:${site.email}`);
     for (const name of ['LeetCode', 'Codeforces', 'CodeChef']) await expect(contact.getByRole('link', { name })).toHaveCount(0);
 

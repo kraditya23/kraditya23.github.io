@@ -27,14 +27,14 @@ const profiles = (
     <SectionHead index={index} label="Contact" />
     <div class:list={['contact-grid', { 'contact-grid--solo': !formId }]}>
       <div class="intro">
-        <h2 class="h2 reveal reveal--mask" id="contact-title"><span>Let’s <span class="hl">connect</span>.</span></h2>
+        <h2 class="h2 reveal reveal--mask" id="contact-title"><span>Let’s <span class="hl">connect</span></span></h2>
         <p class="sub reveal">Hiring for SWE or quant-dev internships, want to talk low-latency C++, or have a contest problem that’s been bugging you? My inbox is open.</p>
         <ul class="connect reveal">
           {profiles.map((p) => (
             <li>
-              <a class="ic" href={p.href} rel="me noopener" title={p.name}>
+              <a class="ic" href={p.href} target="_blank" rel="me noopener" title={p.name}>
                 <Icon name={p.icon} size={28} stroke={1.75} />
-                <span class="visually-hidden">{p.name}</span>
+                <span class="visually-hidden">{p.name} (opens in a new tab)</span>
               </a>
             </li>
           ))}
