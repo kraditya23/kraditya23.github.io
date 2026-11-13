@@ -2,7 +2,7 @@
   "platform": "leetcode",
   "handle": "kraditya23",
   "profileUrl": "https://leetcode.com/u/kraditya23/",
-  "fetchedAt": "2026-11-07T08:57:33.202Z",
+  "fetchedAt": "2026-11-13T09:45:54.309Z",
   "sources": [
     "https://leetcode.com/graphql"
   ],
@@ -10,9 +10,9 @@
     "current": 1861.693,
     "max": 1861.693,
     "title": "Knight",
-    "globalRank": 52792,
-    "participants": 891547,
-    "topPercent": 6.06
+    "globalRank": 52939,
+    "participants": 892590,
+    "topPercent": 6.07
   },
   "contests": [
     {
