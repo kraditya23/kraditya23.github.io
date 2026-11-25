@@ -2,7 +2,7 @@
   "platform": "leetcode",
   "handle": "kraditya23",
   "profileUrl": "https://leetcode.com/u/kraditya23/",
-  "fetchedAt": "2026-11-20T10:12:23.201Z",
+  "fetchedAt": "2026-11-25T11:29:07.474Z",
   "sources": [
     "https://leetcode.com/graphql"
   ],
@@ -243,7 +243,7 @@
     }
   ],
   "solved": {
-    "total": 468,
+    "total": 469,
     "byDifficulty": [
       {
         "label": "Easy",
@@ -251,7 +251,7 @@
       },
       {
         "label": "Medium",
-        "count": 255
+        "count": 256
       },
       {
         "label": "Hard",
@@ -261,7 +261,7 @@
     "byTag": [
       {
         "name": "Array",
-        "count": 245
+        "count": 246
       },
       {
         "name": "String",
@@ -456,6 +456,7 @@
     "2026-09-27": 2,
     "2026-09-28": 1,
     "2026-10-30": 11,
-    "2026-11-01": 4
+    "2026-11-01": 4,
+    "2026-11-24": 1
   }
 }
